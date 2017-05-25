@@ -1,0 +1,1441 @@
+operatory przypisania: <-, <<-, =, ->, ->>
+a <- 5+5     przypisuje wartosc
+
+gdy chce od razu wypisac, mozna uzyc:
+
+a <- 5+5; a
+
+operator <-, mozna uzywac wszedzie,
+operator <<- uzywany jest glownie przy funkcjach
+operator = is only allowed at the top level (e.g., in the complete expression typed at the command prompt) or as one of the subexpressions in a braced list of expressions. 
+
+wniosek: uzywac <-
+
+# - znak komentarza
+
+%% - modulo
+%/% - integer division  - 5 %/% 2 = 2
+
+
+!!!!!!!!     nawigacja nawiasami [rows, columns]
+
+
+TAB'em mozna dopelniac nazwy funkcji oraz szukac podpowiedzi w konsoli
+
+pomoc:  ?functionName() - przekierowuje do stronki HTML (dokumentacji) z dana funkcja 
+??"bla bla" - gdy nie wiesz dokladnie co szukasz
+
+example(functionName) - pokazuje przyklady dla danej funkcji
+
+options() - rozne opcje ustawiane np. precyzja pokazywania wartosci options(digits = XXX)
+
+NaN, +/- Inf, NA - not available
+
+c()     combine function -  przypisuje tablice/wektor; jezeli c() dwa wektory to otrzymujemy wektor skladajacy sie ze wszystkich elementow poprzednich wektorow 
+a <- c(1,2,3,4) 
+
+b<-c(1,2)
+d<-c(3,4)
+bd<-c(b,d)
+wtedy bd = 1 2 3 4
+
+dodanie wartosci do wektora dodaje wartosc do kazdego elementu wektora
+to samo tyczy sie dodania 2 wektorow - wtedy dodawane sa poszczegolne elementy z tym samym indeksem
+
+zmienne bool: TRUE  (lub T), FALSE (lub F) - nie true, false - need CAPITAL letters
+
+przypisanie do wektora liczb , stringa sprawia, ze wszystkie liczby staja sie stringami
+przypisanie do wektora boolean , liczby sprawia, ze wszystkie bool staja sie liczbami
+przypisanie do wektora boolean , stringa sprawia, ze wszystkie bool zostaja T/F, ale staja sie stringami
+
+
+mode() - wypisuje jakiego typu zmienne przechowuje wektor
+
+do elementu wektora mozna sie dostac tak jak w cpp przez a[2]   ALE !!! tutaj numeracja zaczyna sie od 1 a nie od 0  !!!!!
+a[0] zwraca typ zmiennej (logical, numeric, character, integer, double) oraz 0 np. logical(0)
+wyjscie poza zakres zwraca NA
+
+nawigacja nawiasami [rows, columns]
+
+
+wektorowa wersja if else
+ifelse(test,yes,no) - test, warunek, ktory mozna sprowadzic do wartosci logicznej
+	w yes lub no moze byc kolejny warunek ifelse
+
+args(nazwa_funkcji) - podaje jakie argumenty moze przyjmowac funkcja
+
+Grafika w R (base, lattice, ggplot2)
+
+lattice - shorter syntax for complex plots
+ggplot2 - built on the same ideas as lattice package
+plot() - funkcja przeladowana
+plot(a) - rysuje scatter plot gdzie na x jest indeks wektora, a na y wartosci a
+plot(a,b) - na x: a, na y: b
+
+main="" - main title
+xlab="" - podpis osi x
+ylab=""- podpis osi y
+
+wizualizacja:
+col= - kolor
+cex= - size
+pch= -  plot character - rozne ksztalty punktow
+type ="l" - line
+lty= - line type
+xlim=c(xMin, xMax) - granice rysunku
+ylim=c(yMin, yMax) - granice rysunku
+
+boxplot(body[,10:15]) - tak ladniej wyglada ( nie obcina brzegow )
+
+fajnie to widac wykonujac skrypt:
+x<- 1:10
+set.seed(23)
+y <- x + rnorm(10)
+plot(x,y) #position
+plot(x,y, col=x) #colour
+plot(x,y, col=x, cex=x) #size
+plot(x,y, col=x, cex=x, pch=x) #plot chartacter
+lwd=2 # line width
+
+
+a pch badamy przez:
+x <- rep(1:10, 10)
+y <- rep(1:10, each=10)
+z <- 1:100
+plot(x,y,pch =z)
+
+rozroznianie danych na wykresie:
+plot(body$Thigh_girth,body$Bicep_girth, pch=body$Gender)
+plot(body$Thigh_girth,body$Bicep_girth, col=body$Gender+1)
+
+rysowanie 2 wykresow na tym samym canvasie:
+plot(6:25,rnorm(20),type="b",xlim=c(1,30),ylim=c(-2.5,2.5),col=2)
+par(new=T)
+plot(rnorm(30),type="b",axes=F,col=3)
+par(new=F)
+
+mozna rowniez uzyc funkcji do rysowania 2 rzeczy na tym samym canvasie
+lines() - dodaje (modyfikuje) linie do juz istniejacego wykresu
+
+?par() - parametry ogolne, rowniez do rysunkow
+
+madrze jest ustrzymac gdzies domyslnych parametrow np.
+keep.par <- par()  => przypisanie domyslnych parametrow
+mozna rowniez sobie utworzyc obiekt z "ulubionymi ustawieniami" my.par ustawia sie:
+par(my.par)
+
+par(mfrow= c(3,1)) #Ask for three columns and one row in the graph
+
+
+paste() - Concatenate vectors after converting to character.
+
+funkcje statystyczne czesto nazywaja sie tak, ze mozna zgadnac:
+sum(a), mean(a), median(a), sd(a)
+quantile(a,0.25): kwartyl dolny - z testow wynika, ze R sobie sortuje wektor niezaleznie od kolejnosci wpisania wartosci
+
+rnorm(N) - losuje N liczba z rozkladu normalnego
+sort() - sortuje wektor
+order(wyswietla liczby w kolejnosci, ktory element jest na ktorym miejscu po sortowaniu)
+
+barplot() - rysuje wykres slupkowy
+pie() - rysuje wykres kolowy
+
+hist() - histogram
+
+hist(x, breaks) - rysuje histogram (breaks - ilosc przerw (laman) == biny = breaks-1 )
+
+hist jest zapisane w postaci listy
+
+hist in log scale - skomplikowane ale:
+trzeba zapisac hist do obiektu h
+plot(h$counts~h$mids, log="x"("y" lub "xy"), type="h", lwd=10)
+Nie wyglada to jakos super, ale do zaakceptowania
+Mozna tez sie pobawic z  ggplot2: http://r.789695.n4.nabble.com/Histograms-on-a-log-scale-td896200.html
+
+!!! boxplot() -  RYSUJE boxplot, gdzie zaznacza max, min mediane, 1-szy i 3-ci kwartyl !!
+
+boxplot( y ~ x )  //  boxplot y(x) 
+boxplot(obj, las= 1,2,3)  1-opisy poziomo, 2-x pionowo, y-poziomo, 3- x,y pionowo
+
+table(x) - grupuje wartosci wektora w "grupy" wygladajace tak samo (np. ilosc wystapienia powtarzajacych sie liter w wektorze)
+
+do dzielenia danych przydaje sie funkcja cut()
+cut(obj, vec_podzialow) - dzieli dane na interwaly i przypisuje kazdej wartosci interwal, do ktorej ta wartosc wpada, gdzie pierwsza i ostatnia wartosc wektora podzialow to min i max zakresy danych, reszte uznaje za NA
+
+ls() - wypisanie uzywane zmienne w "local namespace". Nie wypisuje wbudowanych wartosci jak np. pi.  Gdy pod pi przypiszemy jakas wartosc, to R najpierw szuka tego w local namespace
+rm(xxx) - usuniecie wartosci spod zmiennej xxx
+rm(list=ls()) - usuniecie wszystkich wartosci
+
+builtins() - lista obiektow, ktore sa wbudowane w R
+
+x<-NULL : stworzenie pustego wektora
+
+round() - zaokragla liczby
+
+format() - mozna wypisac wiecej liczb, wieksza precyzja, precision
+
+precyzja R to jakies 1e-15
+
+
+
+!!!!!!! OPERATOR LOGICZNY pojedynczy !!! tak, jak operatory bitowe w cpp
+
+WARUNKI:
+w nawiasach [ ]   sprawdzamy zgodnosc warunku np.:
+a[a==T] -> zwraca ile jest T w wektorze a
+a[a>1 & a<4] zwraca liczby, ktore spelniaja warunek (w formie wektora)
+
+sum(rollmean(vecY,2)[vecX>= xxx], rm.na=T) - zwraca sume (pole) pod funkcja okreslona przez punkty i ignoruje NA
+rollmean w library("zoo")
+
+OPERATOR LOGICZNY pojedynczy !!! tak, jak operatory bitowe w cpp
+
+aby dostac sie do indeksow liczb wektora, ktore spelniaja warunek uzywa sie funkcji which(), np.
+which(a<1 & a>4)
+which() zwraca pozycje (np. wiersz)
+
+
+Grouped or stacked bar chart
+
+barplot() - zwykly wykres slupkowy 
+barplot(obiekt typu table 2d, legend=T) - 1 wymiar umieszczna na X, a drugi - rysuje rozne kolory dla kazdego slupka 
+legend - umieszcza legende ktory kolor, co oznacza
+
+zeby stworzyc 'stacked' bar chart tzn ze dla danej zmiennej sa dwa slupki obok siebie piszemy argument beside=T
+barplot(obiekt typu table 2d, beside=T)
+
+legend
+
+x<-rnorm(20)
+y<rnorm(10, mean = 5)
+plot( c(x,y), col = c(1,2) )
+legend(1,6, c("txt1", "txt2"), lty = c(1,1), col = c(1,2) )
+
+________________
+
+
+
+
+cat() - do wypisywania, laczenia stringow, itp. Moze tez wypisywac do pliku, gdy podamy plik jako wyjscie
+
+tworzenie sekwencji:
+a) seq(wartosc startowa, wartosc koncowa, krok) -- (( wartosc koncowa nie musi byc w wektorze, w zaleznosci od kroku)
+
+b) a<-c(1:10) : tworzy wektor 1,2,3,...,10
+
+c) paste() - "sklejanie" - uzywane dla stringow
+paste("A", 1:6, sep= "") - A laczy z liczbami 1:6, separation is "", czyli brak separacji miedzy A oraz liczba
+"A1" "A2" "A3" "A4" "A5" "A6"
+
+paste(vec, collapse='') - laczy ze soba wyniki -> brak rozdzielania wynikow
+
+c) rep() - repeat
+   rep(b, 5) - powtarza wektor b, 5 razy
+   rep(1:10, each =2): 1,1,2,2,3,3,4,...
+
+obiekt letters - litery alfabetu, gdzie 1 to a, 2-b, itd..., istnieje rowniez LETTERS (capital)
+rep(letters[1:5],3) - powtorzy litery od a do e, 3 razy
+
+__________________
+exploring object:
+
+typeof(vec) - zwraca typ wektora
+str(vec) - structure - zwraca typ, wielkosc [1:rozmiar], pierwszych kilka elementow
+is.vector(vec) - T/F
+head(vec)  - pierwszych 6 !!! elementow
+tail(vec) - ostatnich 6 !!! elementow
+length(vec)
+max(vec)
+min(vec)
+summary(vec) - wypisuje kilka przydatnych info statystycznych (min, 1st quartile, median, mean, 3rd quartile, max)
+fivenum() - tak jak summary ale ma tylko mediane, nie pokazuje sredniej
+vec[5] <- 55
+plot(x)
+which(x>6)
+
+_________________
+matrix
+
+A %*% B - matrix multiplication
+
+macierz moze trzymac tylko 1 typ zmiennych (numeric/boolean/characters)
+
+dim(M) - wypisuje wymiary
+
+M <- vec ( przypisanie wektora o rozmiarach 50 )
+dim(M)<- c(10,5)  # rows, columns
+stworzy macierz o wymiarach 10x5 z TYLKO zaczyna wpisywac zapelniajac najpierw CALA pierwsza kolumne (NIE WIERSZAMI) - domyslnie byrow = FALSE
+
+matrix<-cbind(col1, col2) - laczy ze soba elementy (zaklada ze to kolumny)  
+//rbind - - laczy ze soba elementy (zaklada ze to wiersze (rows) ) 
+
+mozna podejrzec dany wiersz: M[2,] lub dana kolumne M[,3] w formie wektora
+
+matrix(data, nrow, ncol) 
+nrow, ncol - zadana liczba kolumn i wierszy
+
+colnames()
+rownames() - mozna nazwac kolumny lub wiersze
+
+dimnames(x)[[2]]<-pastate("data",1:3, sep="_")
+
+rownames(obiekt do nazwania) <- wektor z nazwami
+
+> matrix(c(5,4,3,2,1,0),nrow=2) - (ustawia byrow = FALSE, mozna zmienic)
+     [,1] [,2] [,3]
+[1,]    5    3    1
+[2,]    4    2    0
+
+gdy nie podasz jakiejs wartosci, wstawia 'NA'
+
+
+
+x[cbind(c(1,3,2),c(3,3,2))] - jako argument jest macierz, czyli kazda pozycja jest wywolywana
+
+x[c(1,3,2),c(3,3,2)] - jako argument sa 2 wektory, czyli kazda kombinacja jest wywolywana
+
+
+mode() - wypisuje jakiego typu zmienne przechowuje macierz
+
+data.matrix(frame) convert data.frame into matrix
+
+
+
+in Windows is function:
+fix(matrix) - opens editable table of matrix 
+
+MATRIX OPERATION
+
+transpose matrix przez 
+t(matrix)
+aperm() - array transposition - transpozycja macierzy jest rowna komendom:
+tmatrix<-aperm(matrix)
+tmatrix<-aperm(matrix, c(2,1))
+
+apply() - can be used to repeat operations over rows in a matrix.
+lapply - return list - dla list, oraz mozna tez do data.frame
+sapply - zwraca wektor 
+vapply
+tapply
+
+
+apply(matrix[,1:12],1,mean)  -  zwraca srednia dla wszystkich wierszy, kolumn 1:12
+1 - oznacza ze liczy po wierszach, gdyby bylo 2 - liczylby po kolumnach -> spr w dokumentacji
+
+tapply|() - works in the way that it applies the third argument, a function, to subsets of the first argument,
+where the subset corresponds to the levels of the second argument.
+
+tapply(dat$height, dat$gender, mean) -> zwroci srednie wartosci wzrostu dla obu plci
+
+mozna zrobic od 2 argumentow przez liste
+
+tapply(dat$height, list(dat$gender, dat$tmt), mean) -> zwroci srednie wartosci wzrostu dla obu plci i roznego sposobu leczenia (treatment)
+
+dim(ME) = 1000 24
+apply przyjmuje funkcje wiec musimy stworzyc funkcje, ktora ktora jest wykonywana: 
+PVAL<-apply(ME,1, function(ME){t.test(ME[1:12], ME[13:24], var.equal = T)$p.value})
+
+apply(przekazuje do funkcji tylko wektor kolumn albo wierszy) wiec jezeli chcemy go ograniczyc to jest wektor 1 dim, a nie np ME[,1:12], bo to jest juz 1 wiersz !
+
+
+lambda function
+
+w apply mozna wstawic funkcje "lambda"
+apply(matrix,1,function(matrix){mean(matrix, trim=0.05)})  # 1 - liczenie po wierszach
+
+_______
+data.frame
+do data.frame mozemy sie odnosic przez operator [] albo
+do data.frame mozemy sie odnosic przez nazwe kolumny ($)  xxx$colname
+
+pusty data.frame z 2 kolumnami o typie numeric i integer
+#occurances<-data.frame(intervalStart = numeric(), events = integer())
+
+
+mozna laczyc ze soba data.frames, gdy maja jakas kolumne wspolna
+
+datAll<-merge(dat1, dat2, by.x="names", by.y="name")   # nie musza sie tak samo nazywac
+# gdy sa takie same to mozna uzyc by="xxx"
+
+wspolne mozna jako wektory by.x=c("kol1", "kol2"), 
+dodatkowo jezeli maja one kolumny, ktorych nie ma ta druga to trzeba uzyc all=T
+
+str(data.frame) - stucture of object
+
+
+dat<-subset(data.frame, colName > xxx, select = c(colName1, colname2)) 
+select tez moze byc w formie select = colName1:colName3
+albo gdy nie chcemy kolumny to select = -colName
+
+
+przydatne
+! / is.na(Colname) 
+mozna przekazac do funkcji liczacych:
+mean(fata.frame$colName, na.rm=T)   - wtedy wywalamy caly wiersz gdzie bylo NA
+__________
+list() - lista moze trzymac obiekty roznych typow:
+MyList <- list(M, a, vec)
+
+MyList = list() # empty list
+
+wypisanie MyList wypisuje rowniez wszystkie obiekty
+Oznaczanie obiektow listy [[1]], [[2]], ...
+chcac otrzymac konkretny element obiektu listy, najpierw wolamy obiekt listy, a pozniej element obiektu:
+MyList[[1]][2,]
+
+usuwanie elementu listy:
+list[[i]] <-NULL
+
+jezeli chcemy ustawic jakis element na null, to przez:
+x[i]<-list(NULL)
+
+unlist()
+zamiana listy na vector (conversion, konwersja)
+
+
+factor - A special type of vector is called a factor. A factor has a pre-specified set of levels,
+
+gl(2,10,labels=c("M","F"))
+gl - generate levels
+
+lub as.factor(c(rep("M",10), rep("F",10)))
+
+_________________
+# data.frame()  - one row one observation, one column one variable  
+inaczej jest to lista wektorow o takiej samej dlugosci
+
+wszystkie wektory musza miec taka sama wielkosc, bo inaczej nie zostanie stworzone
+
+MyDataFrame <- data.frame(a, b, c)
+    a      b     c
+1 1.0   john  TRUE
+2 2.0  david  TRUE
+3 3.0  kumar FALSE
+4 4.0   jane  TRUE
+5 5.5 mariam FALSE
+
+zeby sie dostac do kolumny(wektora) data.frame uzywamy $
+MyDataFrame$a
+
+zeby sie dostac do wiersza(tej samej wartosci z roznych wektorow) data.frame uzywamy nawiasow []
+MyDataFrame[1,]
+
+samemu przygotowac nazwy np w wektorze 'nazwy'
+names(MyDataFrame) <-nazwy
+
+aggregate(zmiena1 ~ zmienna2, dat= nazwa_data.frame, funkcja) - liczy (funkcje) dla wszystkich wystapien danej zmiennej   ( zmienna1(zmienna2) )
+(takie polaczenie table i apply)
+aggregate(height~gender, data=dat, mean) - zwroci srednia dla obu plci
+dla dwoch argumentow
+aggregate(height~gender+tmt, data=dat, mean) 
+
+UWAGA: dla duzych danych aggregate jest najwolniejsze, by() jest szybsze ~10x , tapply jest najszybsze, choc porownywalne z by() 
+
+
+podobnie dziala by()
+
+by(dat$height, dat$gender, mean)
+
+dla dwoch argumentow robi sie przez liste
+by(dat$height, list(dat$gender, dat$tmt), mean)
+
+
+data.matrix(frame) convert data.frame into matrix
+
+_____________________
+functions
+
+CircleArea <- function(radius) {
+radius*radius*pi
+
+area<-radius*radius*pi
+return(area)  #  jesli chcemy zwrocic obiekt na zewnatrz, to przez return
+
+}
+
+przypisanie nazwie CircleArea funkcji z 1 argumentem: radius.
+Cialo funkcji ograniczamy {} jak w cpp
+
+wpisujac nazwe funkcji bez argumentow i (), otrzymuje wglad w cialo tej funkcji
+
+W R nie mozna przeladowywac funkcji ze wzgledu na rozna liczbe argumentow, zawsze odnosi sie do nazwy
+
+return(obiekt) - zeby zwrocic jakis obiekt z funkcji
+
+domyslny argument
+
+functions
+
+power <- function(x, pow=2) {
+return(a^pow)  
+}
+
+________________
+while(cond) expr   - sprawdzane na poczatku
+
+repeat expr - trzeba wyjsc recznie  - na pewno wykona sie raz - analogia do while{} while()
+
+przydatne komendy: next, break 
+________________
+scripts:
+File-> Source R code albo komenda
+linux: source("/path/fileName.R")
+windows: source("D:\\cranR\\scripts\\fileName.R")
+
+odpalic mozna tez pojedyncza linie kodu przez zaznaczenie jej i przycisk -> run line selection albo Ctrl+r ( w czystej konsoli)
+w RStudio: Ctrl+Enter
+
+______________
+
+FUNKCJE STATYSTYCZNE
+sample()
+sample(x, size, replace = FALSE, prob = NULL) - losowanie z wektora x, size - ile razy losuje, replace - sample with or without replacement, prob - A vector of probability weights for obtaining the elements of the vector being sampled.
+UWAZAC na sample( x[x>5]) z warunkami na wartosci -> sprawdzic przyklady w manualu
+
+ustawianie seed:
+set.seed(liczba)
+
+
+summary(vec) - wypisuje kilka przydatnych info statystycznych (min, 1st quartile, median, mean, 3rd quartile, max)
+
+
+rnorm - random for normal distributions - sa jeszcze 3 inne (dnorm, pnorm, qnorm) Density, distribution function, quantile function for the normal distribution with mean equal to mean and standard deviation equal to sd. 
+rnorm - generator random normal distributin (liczby z rozkladu normalnego)
+dnorm(x, mean, sigma) - wartosc gestosci prawdopodobienstwa dla danego x
+pnorm(x, mean, sigma) - prawdopodobienstwo dla danego x (calka pod krzywa od -inf do x)
+qnorm(quantile) - zwraca wartosc z, dla jakiej wystepuje dana wartosc kwantyla 
+
+podobnie jest dla innych rozkladow statystycznych np:
+dt() - density of t-students distribution
+dchisq() - chi2 distribution
+
+dbinom(x, size, probability)
+
+FDist() - dystrybucja F - przy anovie
+qf(p,df1, df2) - quantile
+
+________chisq.test______
+chisq.test(x,p=prob)
+x- wektor elementow, ktore testujemy
+prob wektor przewidywanego prawdopodobienstwa wystepowania tych elementow (musi sie sumowac do 1) - czyli okreslenie testowanego rozkladu
+
+chisq.test()$expected - zwraca wartosci przewidywanych wystapien na podstawie proporcji i ilosci obserwacji
+
+_______t-test_________
+t.test(x,y,alternative=..., paired=T/F, var.equal=T/F)
+t.test(data, mu= XXX )
+
+alternative - typ testu (jednostronny: "less", "greater", dwustronny: "two.sided") ; less -> sadzimy ze H_A less than H0
+
+paired = F - test dwoch niezaleznych grup danych
+paired = T - test np jednej rzeczy zmierzonej dwukrotnie
+var.equal = T - zalozenie ze wariancje sa takie same dla 2 grup
+var.equal = F - then calculate a special kind of t-test called the welsh test, that compensates for
+different variation in the two groups by calculating a different degree of freedom for the test.
+
+jezeli bedzie dziwne liczba stopni swobody w t-test (nie calkowita) wynika to z faktu, ze zostalo przyjete 
+ze sa rozne wariancje obu grup i ta wartosc kompensuje to.
+
+
+zamiast wymieniac x,y mozna tez:
+t.test(body$Shoulder_girth ~ body$Gender, var.equal=T)
+
+VALUES !!!
+
+t.test(...)$p.value - zwraca p-value danego testu
+
+
+power.t.test()- liczy moc testu z danymi parametrami wejsciowymi 
+
+
+______non-parametric t-test___________
+
+wilcox.test() - wilcoxon rank sum (Mann-Whitney test) - non-parametric; alternatywa dla t.test (2 grupy)
+
+wilcoxon signed rank -> alternatywa do paired t-test
+
+
+
+_____q q plot_____
+quantile-quantile plot - wykres sprawdzajacy czy zmienna ma rozklad normalny, jezeli tak to powinna sie ukladac na linii
+
+qqnorm(), qqline(), qqplot
+qqnorm is a generic function the default method of which produces a normal QQ plot of the
+values in y. qqline adds a line to a “theoretical”, by default normal, quantile-quantile 
+plot which passes through the probs quantiles, by default the first and third quartiles.
+qqplot produces a QQ plot of two datasets.
+
+_______ANOVA__________
+anova(object) - wymaga obiektow
+
+aov(formula, ...) - analysis of variance
+eg: aov(run$time~run$training.method)
+
+wykonac z summary
+summary(aov(run$time~run$training.method))
+
+przykladowa tabela wynikowa:
+                    Df Sum Sq Mean Sq F value   Pr(>F)    
+run$training.method  4   2611   652.7   5.951 0.000623 ***
+Residuals           45   4936   109.7
+
+
+sum(variances)/5 = 109.7  - srednia suma policzonych variancji z kazdej grupy 
+var(means) * 10 = 652.7 - variancja z sum (Central Limit Theorem)
+F value - stosunek wariancji policzonych na 2 sposoby
+Pr(>F) - prawdopodobienstwo wystapienia takiego rozrzutu wariancji
+
+TukeyHSD(aov(run$time~run$training.method)) - wyswietla wyniki (prawdopodobienstwa) ktora z grup sie rozni
+Zwraca dla wszystkich kombinacji roznice, dolna i gorna wartosc przedzialu ufnosci i prawdopodobienstwo
+
+dla 2 czynnikow (two way anova) mozna zrobic to przy uzyciu '*'
+
+aov(run$time~run$training.method * run$training.time )
+
+
+aggregate(group1~group2, data.frame name, funkcja) - Splits the data into subsets, computes summary statistics for each, and returns the result in a convenient form.
+funkcja - funkcja wg ktorej jest robione "obliczenie"
+
+ANOVA dla 3 grup (A,B,C) po 6 elementow (blood sugar):  -> long format
+sugar = data.frame(bs=c(groupA,groupB,groupC),treatment=rep(1:3,each=6))
+summary(aov(sugar$bs~sugar$treatment))
+
+ 
+______non-parametric ANOVA___________
+kruskal.test(x,...) 
+x- lista probek numerycznych
+albo:
+kruska.test(list(x, ...))
+
+mozna tez przygotowac dane tak jak zapisane powyzej w ANOVA
+
+rysowanie: przez plot(...,type="l")   lub
+curve(dnorm(x), from= -4, to=4, add=T/F) 
+add - pozwala dodac krzywa do poprzednio narysowanego wykresu
+
+przyklad zamalowania fragmentu krzywej gaussa i podpisania wartosci prawdopodobienstwa
+
+#one tailed test
+pnorm(72, 90, 10) # probability of randomly selecting a subject bt 72 or lower:
+abline(v=72) # Draw a line for 72 . v (vertical) is the x-value for a vertical line 
+cord.x <- c(60,seq(60,72,1),72) 
+cord.y <- c(0,dnorm(seq(60, 72, 1), 90, 10),0) 
+polygon(cord.x,cord.y,col='skyblue') 
+text(70, 0.005, "blue area = p = 0.0359"):
+
+polygon() - laczy ze soba (zamalowuje) obszary pomiedzy poszczegolnymi, kolejnymi punktami. Jezeli punktow jest za malo, to obszar jest kanciasty. 
+Ostatni pkt dla x i y musi byc wspolrzednymi ostatniego punktu (na ogol: x=xmax, y=0)
+
+// linie mozna tez narysowac przy uzyciu funkcji segments()
+
+
+
+pakiet dplyr - do manipulowania danymi
+text(70, 0.005, paste("blue area = p = ", some_var) ):
+text(cord_x, cord_y, "text to write")
+
+do rysowania txt na wykresie:
+
+
+
+
+W R nie ma funkcji zwracajace mode (dominante), funkcja mode() zwraca wewnetrzny typ obiektu.
+
+funkcja liczaca Mode (z forum :) )
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+jest tez do tego biblioteka:
+
+library(modeest)
+mlv(mySamples, method = "mfv")
+
+
+Marginal and conditional probabilities of categorical variables.
+
+tabulating data - table(), xtabs()
+
+Uwaga: table ignore missing values
+
+xtabs
+mytab<-xtabs(Freq ~ Gender + Admit + Dept, data=DF)
+
+Zbyt zlozona, zeby latwo wyswietlic, dlatego przydaje sie flat table (compact ver of info)
+ftable(mytab)
+
+margin.table(mytab,1:2)
+DepA<-mytab[,,1] - tylko jeden interesujacy
+
+my.table<-with(airquality, table(OzHi = Ozone > 80, Month))
+my.table2<-addmargins(my.table, 1:2)
+
+
+frequency table:
+gtab<-table(acl$Grammy)
+
+
+contingency table:
+prop.table(obiekt klasy table) - tabela proporcji
+
+#obiektem klasy table jest powyzszy gtab
+
+
+tabela 2d
+gtab2<-table(acl$Grammy, acl$Gender)
+prop.table(obiekt klasy table) - wyswietla proporcje czesciowe (suma =1)
+
+marginal proportion (proporcje w wierszach lub kolumnach)
+prop.table(obiekt klasy table,1) - wyswietla w wierszach (1 - pierwsza zmienna tabeli 2d, wtedy suma kazdego wiersza (pierwszej zmiennej)  =1
+prop.table(obiekt klasy table,2) - wyswietla w kolumnach (suma kazdej kolumny =1) -> druga zmienna
+
+pakiet:zoo
+rollmean(vec, 2) - wylicza sednia miedzy punktami - przydatne do obliczania pola pod punktami:
+sum( rollmean(vec,2))
+
+
+
+
+
+_________
+fitowanie
+
+abline() - rysuje linie prosta z parametrami a,b (y=a+bx) - musi byc juz narysowany wczesniej wykres (nie rysuje sam)
+gdy parametr h -> horizontal, gdy v -> vertical
+
+
+cor(x,y)  #If you just want the correlation coefficient (Pearson r)
+cor(x,y)^2 #Or the coefficient of determination (r^2 lub R^2 wypisywane przez prog fitujace - informuje jak dobrze dane pasuja do zalozonego modelu)
+
+corelation matrix !!
+Tworzymy wektor z nazwami zmiennych, ktore nas interesuja
+varOfInterest<-c("nazwa1", "nazwa2", nazwa3)
+cor(dataFrame[,varOfInterest]) - wypisuje macierz korelacji dla tych zmiennych biorac pod uwage wszystkie wiersze
+
+
+______non-parametric correlation coeff = Spearman rank correl coeff_______
+cor(x,y, method ="spearman")
+\
+
+
+__________________
+Linear model
+
+lm() - linear model  (formula object)
+lm.obj <- lm(formula=y~x) # See how models are described in R. y depends on x
+abline(lm.obj)    #We can add the regression line to the scatterplot
+predict(lm.obj) #The predicted y-values for your x-values
+points(x,predict(lm.obj), col="green") #Add predicted values to the graph
+summary(lm.obj)   #Lets look at the content of lm.obj
+str(lm.obj)     #You can retrieve parts of the lm object
+lm.obj$coefficients  #You may want to collect the coefficients
+par(mfrow=c(2,2)) #prepare for a 2x2 layout
+plot(lm.obj) #The built in controls plots for your regression analysis  (?plot.lm)
+par(mfrow=c(1,1)) #Restore 1x1 layout
+
+
+names(lm.obj)
+lm.obj$coef
+
+
+rowniez
+
+summary(lm.obj)$sigma^2 - otrzymanie wariancji
+
+mozna stworzyc obiekt formula i uzyc go w lm
+
+myFormula<-formula(y~x+z+w)
+fit<-lm(myFormula)  : odpowiada y=a+bx +cz + dw + epsilon
+
+y~x+z+x:z    x:z - interaction term
+
+Uzywanie operatorow we wzorze formuly:
+
+model liniowy zaklada istnienie const we wzorze, mo¿na sie tego pozbyc dodajac do wzoru 0 lub -1
+fit<-lm(y~0+x+z+w)   lub y~-1+x+z+w
+
+y~x*z  - ‘crosses’ variables. Including the product
+of two factors in a formula corresponds to including the main effects and the interaction
+
+corresponds to
+y~ x + z + x:z
+
+
+
+y~(x+z+w)^2 - A power in a formula expands interactions between the arguments up to the
+given order. For example, the second power of x+z+w consists of all interactions between
+up to two of the three variables; that is, the three main effects, and all pairwise interactions
+of the three variables.
+
+corresponds to
+y~ x + z +w + x:z + x:w + z:w
+
+
+y~(x+z+w)^2 - x:z - a:b  : The subtraction function removes variables from the formula if possible;
+
+corresponds to
+y~x+z+w+x:w + z:w 
+
+I() - nadpisuje symboliczne znaczenie dzialan i wstawia "arytmetyczne_
+
+fit zaleznosci liniowej ale od potegi 1 i 2 parametru X:
+lm.obj<-lm(Y~X+I(X^2))  - I sprawia ze rozumie to w sensie arytmetycznym
+plot(X,Y)
+lines(sort(X), predict(lm.obj)[order(X)], type="l"); sort- zeby uniknac dziwnych przeskow w danych
+
+
+
+
+LISTA FUNKCJI ZWRACAJACYCH INFORMACJE O OBIEKTACH
+coef() - estimated model parameters
+confint() - confidence intervals for estimated model parameters
+residuals() - raw residuals
+rstandard() - standarized residuals
+model.matrix() - the design matrix
+predict() - predictions from model
+vcov - covariance matrix for estimated model parameters
+anova() - Anova test table for model reduction
+drop1() - test for dropping one term from model, warto podac jaki test (domyslnie F)   (patrzec na prawdopodobienstwo czy > significance, jezeli tak - nieistotny parametr)
+summary() - summary printout and access to summary statistics
+
+
+zmieniajac formule, mozemy uzyc update()
+lm.obj<-update(lm.obj, ~.-NiechcianaZaleznosc)  , gdzie ~. oznacza poprzednio wpisana formule
+
+
+dane ktorych sie nie da transformowac do danych "normalnych"  - np. binarne, zliczba zliczen (rozk Poissona) mozna analizowac uzywajac
+Generalized Linear Model (GLM)
+glm() od tego momentu dziala jak lm()
+
+
+_______sposob porownania emipirycznego 2 grup_________
+1. Zbieramy dane w 1 zbiorze, probkujemy i liczymy roznice:
+
+dif <- numeric(10000)
+for(i in 1:10000){
+dif[i]<-mean(sample(group,13,replace=T))-mean(sample(group,13,replace=T))
+}
+
+// 13 - wielkosc zmierzonej jednej probki
+
+2 tworzymy:
+ecdf() -  construct an empirical cumulative distribution function using 
+In this case ‘empirical’ means: we have no theory, we figured out by experimentation
+
+Fn <- ecdf(dif)
+
+co daje nam wykres skumulowanego prawdopodobienstwa, ze roznica srednich bedzie <= x
+( plot(Fn) - mozna podejrzec )
+
+3. Liczymy realna roznice miedzy probkami:
+measured.dif <- mean(group1)-mean(group2)
+
+4. porownujemy z wyliczonym (na podstawie prob) prawdopodobienstwem
+
+Fn(measured.dif)
+zwraca wartosc (stosunek) ile bylo probek z lacznej grupy o wartosci measured.dif albo mniejszych
+
+Mozna porownac to do one-sided t.test ( t.test(group1,group2, var.equal=T, alternative = "less" )$p.value )
+____________________
+Principal Component Analysis (PCA), basically transforms the data to find new orthogonal variables that explain most of the variation in the dataset. 
+This variation can be analysed either between probes (rows) or samples (columns). 
+We will use the function prcomp() for the PCA. It does the analysis between rows. 
+For our purpose the samples are most interesting to compare, so we need to interchange 
+columns and rows in mydata. This is also called to "transpose" the matrix.
+
+transpose matrix np przez 
+t(matrix) lub aperm() - array transposition
+
+pca <- prcomp(tdata, scale=T)
+summary(pca)
+
+The first component explains the largest part of the variance, but not all. In the best 
+of worlds, this accounts for the difference between our experimental conditions, 
+otherwise we have some unknown batch effect that dominate the experiment.
+
+as.dist() - This function computes and returns the distance matrix computed by using the specified distance measure to compute the distances between the rows of a data matrix.
+hclust() - Hierarchical cluster analysis on a set of dissimilarities and methods for analyzing it.
+
+pearsonCorr <- as.dist(1 - cor(mydata))
+hC <- hclust(pearsonCorr)
+plot(hC, labels = sampleNames(eset)) - The heights of the branches indicate how distant the samples are
+plot(hC, labels = conditions)
+
+inny sposob wizualizacji
+
+heatmap. R clusters the data both on rows columns with this command:
+
+it turns out that the variance of probes with approximately the same expression level is 
+rather similar, and hence one can let probes "borrow" variance from each other to get 
+better variance estimates. Such a method is employed in the limma package 
+(LInear Models for Microarrays).
+limma needs to see the whole dataset, including the high variance probes, to do correct 
+variance estimations. Thus we will go back and use our ExpressionSet containing all data.
+In addition to the actual data, limma needs a model matrix, basically information on 
+which conditions each sample represents. R has a standard function for defining model 
+matrices, model.matrix. It uses the ~ operator to define dependencies. Each input 
+variable should be a factor, so let's first make a factor out of the conditions 
+(agent in our ExpressionSet):
+
+condfactor <- factor(eset$agent)
+Construct a model matrix, and assign the names to the columns:
+
+design <- model.matrix(~0+condfactor)
+
+For the columns of the design matrix you could use any names. I choose "ctrl" for the 
+control samples, and "tnf" for the chemically treated.
+
+colnames(design) <- c("ctrl", "tnf")
+
+estimates the variances:
+
+fit <- lmFit(eset, design)
+
+Now we need to define the conditions we want to compare - trivial in this case since 
+there are only two conditions:
+
+contrastmatrix <- makeContrasts(tnf - ctrl,levels=design) //limma package
+
+he following commands calculate the p-values for the differences between the conditions defined by the contrast matrix:
+
+fit <- contrasts.fit(fit, contrastmatrix)
+ebayes <- eBayes(fit)
+
+hist(ebayes$p.value)
+
+However, there are ways to regulate the p-value cut off in order to have control over the 
+false positives. A common way is the Benjamini-Hochberg adjustment. This adjustment allows 
+you to set a limit to how large fraction of false positive variables (false discovery rate, 
+or FDR) you accept in the results.
+
+This adjustment, at 5% FDR, is built into the decideTests function:
+
+results <- decideTests(ebayes)   // limma package
+
+decideTests produces 0, 1, or -1 for each probes, telling if that probe did not pass the test (0), or was significantly increased (1), or decreased (-1)
+
+A neat function to display the result of just two conditions is the Venn diagram:
+
+vennDiagram(results)
+
+//_______________
+2 przyklad: 
+wizualizacja przez pheatmap -> library("pheatmap") - grupuje w x-ach i y-ach
+
+pheatmap(macierz, cluster_rows = F, cluster_cols = F)  - sprawia, ze nie ma klasteryzacji danych
+
+http://stackoverflow.com/questions/36852101/r-legend-title-or-units-when-using-pheatmap?rq=1
+
+try using ggplot next time
+
+____________________
+workspace
+
+getwd() - get working directory;   change by File->Change dir
+setwd() - ustawia working directory
+dir() - zwraca liste wszystkich plikow w katalogu
+
+history() - zwraca liste uzywanych do tej pory komend
+_______________________
+
+data() - wypisuje liste wbudowanych w ta edycje R baz danych
+
+(przyklad na infert)
+
+przydatne do przegladania:
+head(obj, 7) - 7 pierwszych elementow
+str() - structure, 
+names() - wypisuje kolumny w bazie danych
+attach(baza_danych) - robi wirtualna kopie danych z bazy danych, nastepnie mozna podejrzec te dane wolajac je po nazwach uzytych w bazie danch
+
+(alternatywnie czasmai mozna tez spotkac komende require() ) 
+
+zeby odpiac dany obiekt:
+detach(baza_danych)
+
+attach, detach - rowniez dziala do obiektow z R (np data.frame) pozniej odwolujac sie do nich nie trzeba dawac nazwy obiektu tylko mozna poprzez nazwe kolumn
+UWAGA : trzeba uwazac na powtrzajace sie nazwy!!!
+
+R dodaje zawsze obiekty na szczyt stosu pamieci obiektow, ale nigdy powyzej obiektow globalnych. Kolejnosc mozna podejrzec funkcja searchpaths()[ktory argument (np 1:3)]
+
+funkcja witch() - zapewnia uzywanie w danej komendzie {  which(sum(x1, x2)) }
+ze x1 i x2 beda pochodzic z ostatnio dodanego obiektu
+
+do obiektow nazw w obiektach tez mozna sie dostawac z uzyciem '$'
+head(infert$education)
+
+saving object from R (eg. data.frame):   koncowka xxx.rda, zeby ponownie uzyc ich w R
+save(object, file="blabla.rda")
+
+load() - zeby zaladowac obiekt do R
+
+source() - ladowanie skryptu
+
+Zeby zapisac wszystko co do tej pory bylo zrobione w R:
+save.image(file="xxx.RData")  -> Save workspace z koncowka xxx.RData,
+jest to rownowazne File-> Save Workspace
+
+
+Zapis obiektu do pliku:
+write.table(resData, "most_regulated.txt", sep="\t", quote = T/F)
+quote- zapisuje "" nad danymi logicznymi lub znakowymi
+
+
+zapis obiektu do pliku w reprezentacji tekstowej:
+ dump() - musimy tutaj stworzyc taki obiekt
+taki obiekt mozna wczytac do R przez source()
+
+
+zapis rysunku do pliku/ save plot to file
+
+    Open a device, using png(), bmp(), pdf() or similar
+    Plot your model
+    Close the device using dev.off()
+
+
+example:
+fit <- lm(some ~ model)
+
+png(filename="your/file/location/name.png")
+plot(fit)
+dev.off()
+
+
+gdy chcemy zapisac jakis rysunek, ktory juz jest mozna to zrobic komenda:
+dev.print(pdf, 'filename.pdf')
+
+
+
+dput() - do pliku mozna zapisac obiekt wczesniej stworzony gdzie indziej
+taki obiekt mozna wczytac do R przez dget()
+
+otwieranie pliku do pisania
+f1<-file("plik", open="w")
+
+mozna tez przez cat() wypisywac do pliku, 
+
+writeLines(..., con="filename") - pisze do pliku jako jedna linia
+
+wczytuje sie tak samo przez load()
+
+class(obiekt) - wypisuje jakiej klasy jest dany obiekt
+show() - wypisuje domyslne informacje o obiekcie (zalezne od klasy obiektu)
+
+
+sink() - pozwala wpisywac do pliku, to co normalnie jest wyswietlane na ekranie
+sink("plik.txt") ...  zeby zakonczyc wypis do pliku sink() 
+___________________________
+praca na stringach
+
+
+laczenie liczb i stringow  C-like formatting
+
+sprintf("bla bla %d, bla bla "%.3f" blabla", int_val, float_val)
+
+
+
+PAKIET: 'stringr'
+
+pmatch(pattern, table) - zwraca element wektora, w ktorym znalazl pierwszy pasujacy substring wzorca
+ALE niestety dziala tylko od poczatku stringow
+charmatch(pattern, table) - podobnie jak wyzej, ale operuje na pojedynczych charach
+
+grep(pattern, table) - poszukuje czy pattern pasuje do jakiegokolwiek fragmentu stringow tablicy i podaje w ktorych elementach, jezeli w wiecej niz 1, to zwraca wszystkie
+
+grepl - zwraca vektor wartosci logicznych w zaleznosci czy znalazl, czy nie
+
+poniewaz pattern moze byc tylko wektorem o dlugosci 1 (pozostale sa ignorowane), nalezy je zapisac w formie:
+"abc|fgh|xyz"  | - odpowiada OR czyli szuka ktoregokolwiek ciagu znakow 
+
+strsplit(x, pattern) - rozdziela zmienne znakowe x w miejscu znalezienia pattern
+
+substr(x,start,stop)
+substring(text, start, stop)
+
+nchar() - zwraca liczbe znakow -> jezeli bardziej skomplikowane (puste znaki, NA) stosowac str_length() 
+
+komendy z pakietu sringr
+
+str_trim() - potrafi usuwac "puste znaki", whitespace
+
+sub() - zastepuje pierwsze pojawienie sie patternu
+gsub() - zastepuje wszystkie pojawienia sie patternu - replace - global substitution
+
+przyklad zlozonego
+pattern<-".*orange[ :]*([0-9]*).*"
+.* - dowolne znaki
+[ :] - sekwencja bialych znakow albo ":"
+([0-9]*) - sekwencja cyfr
+
+\\1 - back-reference: zamiast stringa, ktory ma zastapic pattern
+
+_____________________________
+pakiety biblioteki library:
+
+library(help = "stats") - wypisuje funkcje danego pakietu
+
+vignette("DESeq2") - czasami tez dziala i pokazuje bardziej zaawansowane info o pakiecie
+
+
+search() - wypisuje zawartosc, gdzie szuka komend, itd.  Np. zaladowane pakiety
+
+biblioteki library
+
+install.packages("nazwa_pakietu")  - instalacja pakietu o znanej nazwie
+Mozna tez wyklikac: Packages->Install Packages i pozniej mozna przejrzec dostepne pakiety (w RGui, nie rstudio)
+ 
+zeby aktywowac dany zainstalowany pakiet uzywamy komendy:
+library("nazwa_pakietu")
+
+Hmisc - obsluga danych z SPSS
+
+zeby uzyc np:
+map("world")
+
+////////////////////////////////////////////////////////
+
+
+strony z danymi:
+www.data.gov
+https://healthdata.gov/
+Data.gov.uk
+
+Preparing the data
+
+reading table:
+
+a <-read.table("clipboard", header=T, sep="\t")  - czyta ze schowka, ustawienie czy kolumny maja naglowek (T/F), separator 
+
+w R naglowek nie moze sie zaczynac od liczby -> R dodaje sobie literke
+
+warto wtedy samemu przygotowac nazwy np w wektorze 'nazwy'
+names(a) <-nazwy
+
+b <-read.table("fileName", header=T, sep=";")   
+
+read.table(stringsAsFactors = F/T) - wczytuje znaki jako stringi lub jako factor !! 
+
+PLIKI CSV (comma separated values): wartosci oddzielone sa ';'
+
+removing rows and columns : put negative index => remove columns and rows
+b <- b[-31:-33,-10:-12] - usuwa wiersze (31:33) i kolumny (10:12)
+
+
+is.na(vec) - zwraca vec wartosci T/F w zaleznosci, czy znalazl NA
+anyNA(vec) - zwraca 1 wartosc T/F dla calego wektora
+
+is.na(vec) <-c(2) - pod 2-gim elementem wektora umieszcza NA 
+
+w <- which(apply(is.na(expdata), 1, sum) > 0 ) - szuka ktore wiersze posiadaja NA (brak danych)
+temp <- expdata[-w, ] - usuwa dane wiersze
+
+
+Wiersz z pustymi wartosciami w kolumnach (brak danych)
+read.table(..., fill=T)  fill - tworzy kolumny z pusta wartoscia
+
+read.fwf() (fixed width format) - vlues are separated by white space width (moga byc rozne w ramach 1 wiersza)
+read.csv()
+read.csv2() - dec = ","
+
+readLines() - czyta tylko 1 linie (wiersz) i umieszcza w obiekcie (cala linie jako 1 element)
+wtedy przydaje sie funkcja strsplit(vec[2], " ")  - rozdziela liczby jako elementy listy + as.numeric() odpowiedniego elementu listy
+
+wszystkie funkcje read opieraja sie na:
+scan()
+
+uzywajac scan() - przydaje sie wczesniej zrobic sobie obiekt f1<-file("nazwa", open="r") i pozniej w scan odnosic do f1
+pozniej do zamkniecia: close(f1)
+
+
+przyklad wczytania pliku csv majac tylko adres URL:
+R radzo sobie z http, ale do innych np https trzeba zainstalowac pakiet RCurl
+
+test <-read.csv("http://www.whitehouse.gov/sites/default/files/omb/budget/fy2012/assets/budauth.csv")
+
+
+grep("pattern", vec) - zwraca wartosci wierszy, gdzie pojawia sie "pattern" w vec
+
+test[grep("pattern", test)] - zwraca wartosci wieszy, w ktorych wystepuje pattern
+
+date() - zwraca obecna date i godzine
+
+API - Application Programming Interface - specyfikacje, dzieki ktorym programy moga laczyc sie z innymi programami 
+
+rOpenGov - API pozwalajace laczyc R z roznymi danymi udostepnianymi przez organizacje rzadowe
+
+obesity <- read.csv("http://www.hscic.gov.uk/catalogue/PUB13648/Obes-phys-acti-diet-eng-2014-tab_CSV.csv", skip=4, nrows=12)  - skip first 4 rows(wiersze), oraz zaimportuje number of rows = 12
+
+gsub() - global substitution
+gsub("look_for","replace",where)
+
+as.charachter() - change to character variables  eg.  From factor to char 
+as.numeric() change to numeric variables  eg.  from char to numeric
+vec <- vec[-1,c(-2, -5:-12)]  - usuniecie pierwszego wiersza, oraz kolumn 2, 5:12
+
+_______________
+
+time object
+
+dates: ?as.POSIXct, ?as.Date
+
+do daty mozna dodawac (wynik zalezy od reprezentacji (as.POSIXct albo as.Date)
+
+For this, R has the function julian(), which converts the dates into so-called Julian dates, which is the number of days passed since a specific time point.
+
+
+he weekdays() function can extract the weekdays from the dates
+
+You may benefit from installing the chron package and access the month.day.year() function.
+
+my.days.structure<-month.day.year(my.days,origin=c(1,1,1960)) 
+
+//________________
+formats:    on data.frame formatting
+
+wide - few observables in one row
+long format - one row - one observation
+
+we can change format with package reshape2
+
+inside is function melt(object)
+
+
+#  install.packages("lubridate")
+#  setting the argument colClasses=  in read.table() can reduce import time of large datasets
+
+
+levels() - odpowiednik names() tylko ze dla jakiejs podkategorii w data.frame
+
+//_____________________________
+
+petla for(
+for loop
+
+x <- rnorm(100000)
+y <- rnorm(100000)
+z <- rep(NA, 100000) #z is created empty but with a given size.
+
+for (i in 1:100000) {
+z[i] <- x[i] + y[i]
+} 
+
+
+stworzenie (zadeklarowanie) pustego wektora o danym rozmiarze
+z <-numeric(100000)
+
+
+if()  jesli , jezeli
+if(cond) expr
+
+testowanie czasu wykonania:
+system.time( dzialanie ) 
+
+
+_________
+SQL - pakiet RODBC
+
+odbcDriverConnect             ODBC Open Connections
+sqlQuery                Query an ODBC Database
+sqlTables               List Tables on an ODBC Connection
+sqlFetch                Reading Tables from ODBC Databases
+sqlColumns              Query Column Structure in ODBC Tables
+close(connection)       Close the connection
+
+
+connectStr<-paste(
+  "Server=msedxeus.database.windows.net",   # lub ="My_machine" jesli jest baza gdzies na dysku
+  "Database=DAT209x01",
+  "uid=Rlogin",
+  "pwd=P@ssw0rd",
+  "Driver={SQL Server}",
+  sep=";")   # to moze sie roznic w zaleznosci , gdzie sie lacze, np moze byc jeszcze "Port="  i inne
+
+conn<-odbcDriverConnect(connectStr)
+
+przyklady w microsoftCourse_201604 w ex7_SQL.R
+
+
+biblioteka:SDSFoundations
+
+______fitowanie prostej_________
+z biblioteka 
+library(SDSFoundations) - bliblioteka z kursu Fundamentals of data analysis
+linFit(x,y) -> zwraca intercept, slope, R-squared + scatter plot with line
+
+
+function (x, y, xlab = deparse(substitute(x)), ylab = deparse(substitute(y))) 
+{
+    y1 <- as.numeric(y)
+    x1 <- as.numeric(x)
+    lin_model <- summary(lm(y1 ~ x1))
+    b0 <- lin_model$coef[1]
+    b1 <- lin_model$coef[2]
+    r2 <- lin_model$r.squared
+    plot(x1, y1, main = "Linear", pch = 16, xlab = xlab, ylab = ylab)
+    abline(lm(y1 ~ x1))
+    lin.out <- list(Intercept = b0, Slope = b1, r_sq = r2)
+    cat(" Intercept = ", round(b0, 5), "\n", "Slope = ", round(b1, 
+        5), "\n", "R-squared = ", round(r2, 5))
+    return(invisible(lin.out))
+}
+<environment: namespace:SDSFoundations>
+
+_____fitowanie exponenty______
+expfit(x,y)   -> zwraca a,b, R^2   (y=a*e^b)
+
+function (x, y, xlab = deparse(substitute(x)), ylab = deparse(substitute(y))) 
+{
+    y1 <- as.numeric(y)
+    x1 <- as.numeric(x)
+    y1[y1 == 0] <- 1e-09
+    ylog <- log(y1)
+    lin_model <- summary(lm(ylog ~ x1))
+    lin_int <- lin_model$coef[1]
+    lin_slope <- lin_model$coef[2]
+    a <- exp(lin_int)
+    b <- exp(lin_slope)
+    r2 <- lin_model$r.squared
+    lotx <- seq(min(x1), max(x1), length = 100)
+    fity <- a * (b^lotx)
+    plot(x, y, main = "Exponential", pch = 16, xlab = xlab, ylab = ylab)
+    lines(lotx, fity)
+    exp.out <- list(a = a, b = b, r_sq = r2)
+    cat(" a = ", round(a, 5), "\n", "b = ", round(b, 5), "\n", 
+        "R-squared = ", round(r2, 5))
+    return(invisible(exp.out))
+}
+<environment: namespace:SDSFoundations>
+
+
+expfitPred(x,y,x0) - x0, wartosc dla zmiennej x0 -> dodaje ja do rysunku i pokazuje
+
+function (x, y, xval, xlab = deparse(substitute(x)), ylab = deparse(substitute(y))) 
+{
+    y1 <- as.numeric(y)
+    x1 <- as.numeric(x)
+    y1[y1 == 0] <- 1e-09
+    ylog <- log(y1)
+    lin_model <- summary(lm(ylog ~ x1))
+    lin_int <- lin_model$coef[1]
+    lin_slope <- lin_model$coef[2]
+    a <- exp(lin_int)
+    b <- exp(lin_slope)
+    gx <- seq(min(x1, na.rm = TRUE), max(c(x1, xval)), length = 100)
+    gfit <- a * (b^gx)
+    plot(x1, y1, main = "Exponential", pch = 16, xlim = c(min(gx), 
+        max(c(gx, xval))), ylim = c(min(gfit), max(c(y1, gfit), 
+        na.rm = TRUE)), xlab = xlab, ylab = ylab)
+    lines(gx, gfit)
+    predy <- a * (b^xval)
+    points(xval, predy, pch = 16, col = "red")
+    mtext(paste("Predicted value: ", round(predy, 3), sep = ""), 
+        3)
+    pred.value <- round(predy, 3)
+    return(invisible(pred.value))
+}
+<environment: namespace:SDSFoundations>
+
+
+_____fitowanie logistic function______
+logisticFit(x,y)  -> zwraca C, a,b, R^2   (y=C/(1+a*b^(-x)) )
+
+function (x, y, xlab = deparse(substitute(x)), ylab = deparse(substitute(y))) 
+{
+    y1 <- as.numeric(y)
+    x1 <- as.numeric(x)
+    y1[y1 == 0] <- 1e-09
+    log.ss <- nls(y1 ~ SSlogis(x1, phi1, phi2, phi3))
+    C <- summary(log.ss)$coef[1]
+    a <- (exp((summary(log.ss)$coef[2]) * (1/summary(log.ss)$coef[3])))
+    b <- exp((1/summary(log.ss)$coef[3]))
+    lotx <- seq(min(x1), max(x1), length = 100)
+    plot(x, y, main = "Logistic Function", pch = 16, xlab = xlab, 
+        ylab = ylab)
+    pred <- predict(log.ss, data.frame(x1 = lotx))
+    lines(lotx, pred)
+    r1 <- sum((y1 - mean(y1, na.rm = TRUE))^2, na.rm = TRUE)
+    r2 <- sum(residuals(log.ss)^2)
+    r_sq <- (r1 - r2)/r1
+    log.out <- list(C = C, a = a, b = b, r_sq = r_sq)
+    cat("Logistic Fit", "\n", "C = ", round(C, 5), "\n", "a = ", 
+        round(a, 5), "\n", "b = ", round(b, 5), "\n", "R-squared = ", 
+        round(r_sq, 5))
+    return(invisible(log.out))
+}
+<environment: namespace:SDSFoundations>
+
+logisticFitPred(x,y,x0) - x0, wartosc dla zmiennej x0 -> dodaje ja do rysunku i pokazuje
+
+_____fitowanie trzech powyzszych naraz_________
+tripleFit(x,y)
+
+
+
+
+_________ simulations __________
+
+ The default Pseudo-Random Number Generator in R is called the Mersenne Twister. The Mersenne Twister is named after its period, which is 2 to the power of 19937, minus 1. This number is a so-called Mersenne prime.
+
+ This seed is an initial value that all the random numbers are created from,
+and it is by default constructed from the time and the session ID of your R session
+
+set.seed()
+
+runif()
+rnorm()
+rgamma() - cover chi2 
+rbinom()
+rmultinom()
+
+
+integrate(func, min, max)$value
+wzor funkcji mozna zdefiniowac podczas tworzenia "funkcji"
+func<-function(x){cos(x)}
+
+replicate(liczba, funkcja) - powtarza wykonanie funkcji "liczbe" razy 
+
+_____ ggplot2 _____
+wszystkie obiekty powstawiace w ggplot2 sa obiektami R. Moga byc zapisane i edytowane
+
+ggplot() - basic plotting function
+qplot() - quick plot - for simple plotting
+# color, log, facets-split in a multi-panel plot (by groupping), main = title
+
+rysunek tworzysz powlokami:
+ + dodaje obiekty do rysunku - kolejnosc ma znaczenie
+
+Layer: astetics(aes) - defines how the data are mapped
+layer: geometric objects (geom) Points, lines, etc
+layer: coordinate system objects (coord)
+
+coord_flip() - zamana x<->y
+coord_polar() - biegunowe
+facet_grid( zmienna ~ .)   . oznacza poprzednia formule
+
+http://docs.ggplot2.org
+
+
+ggplot() + aes(x = x) + geom_density() 
+ qplot(x, geom = "density") 
+
+____ ggmap ____
+
+sciagane z google
+
+myLocation <- "University of Washington"   albo
+myLocation<- c(lon=-106, lat = 31)
+
+zoom factor  3 = continent, 10 = city, 21 = buldings
+
+mapData1<-get_map(location = myLocation, color = "color", source = "google", maptype = "satellite", zoom = 16)
+ggmap(mapData1, extent = "panel", ylab = "Lattitude", xlab = "Longitude")
+
+
+
+
+
+######################
+
+debug mode in rstudio
+https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio
