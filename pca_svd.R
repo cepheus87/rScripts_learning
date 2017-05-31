@@ -4,6 +4,8 @@
 
 # https://www.r-bloggers.com/computing-and-visualizing-pca-in-r/
 
+# wazny pkt to 3 !!!!!!!!!
+# 3a przypadek, gdy wiecej obserwabli niz pomiarow n x p ( p > n ) 
 
 #w pakiecie stats
 ?prcomp
@@ -125,11 +127,24 @@ scale <- ir.pca$scale
 
 
 #####################
+# !!!! 3
+
 
 # http://www.cs.otago.ac.nz/cosc453/student_tutorials/principal_components.pdf
+# troche zamotane pod koniec z tymi transpozycjami macierzy
 
 X <- rbind( c(.69, .49), c(-1.31, -1.21), c(.39, .99), c(.09, .29), c(1.29, 1.09), c(.49, .79), c(.19, -.31), c(-.81, -.81), c(-.31, -.31), c(-.71, -1.01) )
+axes <- c("xax", "yax")
+
+X_3col <- cbind(X, round(rnorm(10), 1) )
+X_3col[,3] <- X_3col[,3] - mean(X_3col[,3])
+X<- X_3col
+axes <- c(axes, "zax")
+
+
+colnames(X) <- axes
 X
+plot(X)
 
 XnotCentered <- t( t(X) + c(1.81, 1.91 ))
 XnotCentered
@@ -141,12 +156,17 @@ cov(X)
 C <- ( t(X) %*% X ) / (nrow(X)-1)
 C
 
+
 #to sa eigenvectors
-pca <- prcomp(X)
+pca <- prcomp(X)   # dla X_3col rot = 3x3
 pca
 
 pca_notCentData <- prcomp(XnotCentered, center = T, scale = F )
 pca_notCentData
+
+evec <- pca$rotation   # to jest V
+#ortogonalne -> evec %*% t(evec) = unit
+
 
 pc1 <- pca$rotation[,1]
 pc2 <- pca$rotation[,2]
@@ -166,6 +186,32 @@ sum(apply(X, 2, var))
 #eb
 
 
+
+#  C = V L t(V)
+
+diagM<- diag(ev)   # L
+
+evec %*% diagM %*% t(evec)  # equals the cov matr
+
+#princip comp values (in PC space)
+# PC = X V
+X %*% evec
+plot(X %*% evec)
+
+PC <-X %*% evec
+PC1 <- X %*% pc1
+PC1
+
+# get back to data  X = PC t(V)
+PC %*% t(evec)  
+X1 <- PC1 %*% t(pc1)
+X1   # data transformed to 1st pc
+plot(X1)
+
+plot(x = X[,1], y = PC1)  #  projection of PC1
+
+####  ponizej wersja zamotana z transpozycjami macierzy
+
 plot(X)
 lmobj<-lm( X[,2] ~ X[,1])
 abline(lmobj)
@@ -175,26 +221,40 @@ pca$rotation[1,1]
 abline(0, pca$rotation[2,1] / pca$rotation[1,1], col = 2)   # Ax + By = 0
 
 
+library(ggfortify)
+autoplot(pca, data = X, loadings = TRUE, loadings.colour = 'blue', loadings.label = TRUE, loadings.label.size = 4)
+
+biplot(pca)
+pc1 # w kierunku PC1
+pc2 # w kierunku PC2
+
 # to choose given principal component we need to create a matrix of eigenvectors as columns
 #   finalData = t(choosenEigenVec)   %*%  t(data)
 
-
-#dane w przestrzeni wybranego wektora (obrocone)
+#dane w przestrzeni wybranego wektora (obrocone)   # wersja wyzsza jest prostsza niz te dziwne transpozycje
 finalData1 <- t(pc1) %*% t(X)
 finalData1
+t(finalData1)
+X[,"xax"]
+plot( x= X[,"xax"], y = t(finalData1))
 plot(t(finalData1))
 
+#1PC vs xax
+plot(x = t(finalData1), y = X[,"xax"])
 
+#1PC vs yax
+plot(x = t(finalData1), y = X[,"yax"])
 
 finalData2 <- t(pc2) %*% t(X)
 finalData2
 plot(t(finalData2))
 
 
-
+#dane w przestrzeni PC1 vs PC2
 finalDataAll <- t(pca$rotation) %*% t(X)
 t(finalDataAll)
 plot(t(finalDataAll))
+
 
 
 # to obtain orginal coordinates 
@@ -214,15 +274,38 @@ orgDataAll <- pca$rotation %*% finalDataAll
 plot(t(orgDataAll))
 
 
+##################
 
+# 3a  !!!! rozkminy, gdy wiecej obserwabli niz pomiarow n x p ( p > n ) 
+
+X2 <- rbind( c(.69, .49), c(-1.31, -1.21), c(.39, .99), c(.09, .29), c(1.29, 1.09), c(.49, .79), c(.19, -.31), c(-.81, -.81), c(-.31, -.31), c(-.71, -1.01) )
+X_3col <- cbind(X2, round(rnorm(10), 1) )
+X_3col[,3] <- X_3col[,3] - mean(X_3col[,3])
+X2<- X_3col
+X2 <- t(X)
+X2   #( 3 x 10 )
+
+
+pca2 <- prcomp(X2)
+pca2
+
+evec2 <- pca2$rotation  
+
+ evec2 %*% t(evec2)  # (5 x 5) - zle
+t(evec2) %*% evec2   # (3 x 3) ~ unit
+
+PC_2 <- X2 %*% evec2
+PC_2
+
+# nie da sie odzyskac danych oryginalnych
 
 ######
-plyr/dplyr
-lubridate   # do praca na datach
-knitr # do raportow
-stringr # praca na stringach
-tidyr  # praca na tagowanych danych
-
-#do wczytywania danych
-readr   #  do wczytywania tabelarycznych
-readxl  # do wczytywania danych excellowskich
+# plyr/dplyr
+# lubridate   # do praca na datach
+# knitr # do raportow
+# stringr # praca na stringach
+# tidyr  # praca na tagowanych danych
+# 
+# #do wczytywania danych
+# readr   #  do wczytywania tabelarycznych
+# readxl  # do wczytywania danych excellowskich

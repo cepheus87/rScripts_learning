@@ -258,6 +258,13 @@ matrix
 
 A %*% B - matrix multiplication
 
+macierz jednostkowa, unitary matrix
+diag(3) - tworzy macierz diagonalna
+diag(vec) - tworzy macierz diagonalna z wartosciami wlasnymi na diagonali
+diag(matr) - zwraca wektor wartosci wlasnych
+
+http://www.statmethods.net/advstats/matrix.html - many useful things 
+
 macierz moze trzymac tylko 1 typ zmiennych (numeric/boolean/characters)
 
 dim(M) - wypisuje wymiary
