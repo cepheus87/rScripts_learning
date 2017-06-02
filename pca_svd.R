@@ -4,6 +4,9 @@
 
 # https://www.r-bloggers.com/computing-and-visualizing-pca-in-r/
 
+#jak rysowac biploty przez autoplot
+# https://cran.r-project.org/web/packages/ggfortify/vignettes/plot_pca.html
+
 # wazny pkt to 3 !!!!!!!!!
 # 3a przypadek, gdy wiecej obserwabli niz pomiarow n x p ( p > n ) 
 
@@ -141,8 +144,8 @@ X_3col[,3] <- X_3col[,3] - mean(X_3col[,3])
 X<- X_3col
 axes <- c(axes, "zax")
 
-
 colnames(X) <- axes
+
 X
 plot(X)
 
@@ -167,9 +170,12 @@ pca_notCentData
 evec <- pca$rotation   # to jest V
 #ortogonalne -> evec %*% t(evec) = unit
 
-
 pc1 <- pca$rotation[,1]
 pc2 <- pca$rotation[,2]
+pc3 <- pca$rotation[,3]
+
+
+
 
 # values that are (proportional to) eigenvalues simply by taking their squares:
 #eigenvalues
@@ -201,6 +207,9 @@ plot(X %*% evec)
 PC <-X %*% evec
 PC1 <- X %*% pc1
 PC1
+#without ver
+PCv <- X %*% evec[,-2]
+PCv
 
 # get back to data  X = PC t(V)
 PC %*% t(evec)  
@@ -208,7 +217,24 @@ X1 <- PC1 %*% t(pc1)
 X1   # data transformed to 1st pc
 plot(X1)
 
+X1v <- PCv %*% t(evec[,-2])
+X1v
+
 plot(x = X[,1], y = PC1)  #  projection of PC1
+
+# rzutowanie PC t(PC) na dane 
+Xnew <- X - ( PC1 %*% t(PC1) %*% X)
+
+######## sprawdzenie liczenie korelacji  wzgledem PCs
+
+PC2 <- X %*% pc2
+PC3 <- X %*% pc3
+
+PC # (10x3)
+PC2 # (10x1)
+
+cor( t(PC) %*% PC1 )
+
 
 ####  ponizej wersja zamotana z transpozycjami macierzy
 
@@ -286,16 +312,33 @@ X2 <- t(X)
 X2   #( 3 x 10 )
 
 
-pca2 <- prcomp(X2)
+pca2 <- prcomp(X2, center = T)
 pca2
 
+
 evec2 <- pca2$rotation  
+
+evec2_1col <- pca2$rotation[,1]
+
 
  evec2 %*% t(evec2)  # (5 x 5) - zle
 t(evec2) %*% evec2   # (3 x 3) ~ unit
 
 PC_2 <- X2 %*% evec2
 PC_2
+
+PC_2_1 <- X2 %*% evec2_1col
+PC_2_1
+
+c_ct <- PC_2_1 %*% t(PC_2_1)
+c_ct
+
+c_ct %*% X2
+
+X2new <- X2 - (c_ct %*% X2)
+
+plot(X2[1,], X2[2,])
+plot(X2new[1,], X2new[2,])
 
 # nie da sie odzyskac danych oryginalnych
 
