@@ -180,6 +180,10 @@ PC2 # (10x1)
 
 
 
+
+##################
+##################
+##################
 ##################
 
 # 3a  !!!! rozkminy, gdy wiecej obserwabli niz pomiarow n x p ( p > n ) 
@@ -189,6 +193,12 @@ X_3col <- cbind(X2, round(rnorm(10), 1) )
 X_3col[,3] <- X_3col[,3] - mean(X_3col[,3])
 X2<- X_3col
 X2 <- t(X2)
+
+##### rnorm data
+X2 <- round(rnorm(10), 1)
+X2 <- cbind(X2, round(rnorm(10), 1) )
+X2 <- cbind(X2, round(rnorm(10), 1) )
+#####
 
 #centrowanie
 X2<- apply(X2, 2, function(X2){X2 -  mean(X2)} )
@@ -207,8 +217,8 @@ evec2_1col <- pca2$rotation[,1]
 evec2_2col <- pca2$rotation[,2]
 
 
-evec2 %*% t(evec2)  # (5 x 5) - zle
-t(evec2) %*% evec2   # (3 x 3) ~ unit
+# evec2 %*% t(evec2)  # (5 x 5) - zle
+# t(evec2) %*% evec2   # (3 x 3) ~ unit
 
 PC_2 <- X2 %*% evec2
 PC_2
@@ -226,10 +236,23 @@ X2_2 <- PC_2_2 %*% t(evec2_2col)
 
 
 X2_recreated <- PC_2 %*% t(evec2)
+X2_recreated
+
+X2_only3rd <- X2 - X2_1 - X2_2
 
 X2_2new <- X2 - ( ( PC_2_1 %*% t(PC_2_1) %*% X2)  )
+
 #skalowanie przez  ~cov ^-1
-#X2_2newScaled <- X2 - ( ( PC_2_1 %*% t(PC_2_1) %*% X2)  %*% solve(t(X2) %*% X2) )
+X2_2newScaled <- X2 - ( ( PC_2_1 %*% t(PC_2_1) %*% X2)  %*% solve(t(X2) %*% X2) )
+
+X2_Scaled_only3rd <- X2 - ( ( PC_2_1 %*% t(PC_2_1) %*% X2)  %*% solve(t(X2) %*% X2) ) - ( ( PC_2_2 %*% t(PC_2_2) %*% X2)  %*% solve(t(X2) %*% X2) )
+
+X2_only3rd
+X2_2
+
+X2_2
+X2_Scaled_only3rd
+
 
 
 #https://en.wikipedia.org/wiki/Principal_component_analysis

@@ -49,6 +49,11 @@ przypisanie do wektora boolean , liczby sprawia, ze wszystkie bool staja sie lic
 przypisanie do wektora boolean , stringa sprawia, ze wszystkie bool zostaja T/F, ale staja sie stringami
 
 
+last element of vector
+ostatni element wektora
+tail(x, n=1)
+
+
 mode() - wypisuje jakiego typu zmienne przechowuje wektor
 
 do elementu wektora mozna sie dostac tak jak w cpp przez a[2]   ALE !!! tutaj numeracja zaczyna sie od 1 a nie od 0  !!!!!
@@ -1446,3 +1451,21 @@ ggmap(mapData1, extent = "panel", ylab = "Lattitude", xlab = "Longitude")
 
 debug mode in rstudio
 https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio
+
+
+##########
+
+parallelize jobs:
+
+# library(parallel)
+# nc<-detectCores()
+# #nc
+# #create cluster
+# cl<-makeCluster(rep("localhost", nc - 1))
+#
+# system.time(
+# test <- matprod_par(cl, refDataToSVD, VVT)   #  dla 2 rdzeni RAM + 9GB w SWAP, co sprawia, ze zajelo 270 sek
+# )
+#
+# # remember to shut down clusters before quitting R
+# stopCluster(cl)
