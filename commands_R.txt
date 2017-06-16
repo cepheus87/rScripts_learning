@@ -212,7 +212,7 @@ barplot(obiekt typu table 2d, beside=T)
 legend
 
 x<-rnorm(20)
-y<rnorm(10, mean = 5)
+y<-rnorm(10, mean = 5)
 plot( c(x,y), col = c(1,2) )
 legend(1,6, c("txt1", "txt2"), lty = c(1,1), col = c(1,2) )
 
@@ -334,7 +334,11 @@ tapply
 apply(matrix[,1:12],1,mean)  -  zwraca srednia dla wszystkich wierszy, kolumn 1:12
 1 - oznacza ze liczy po wierszach, gdyby bylo 2 - liczylby po kolumnach -> spr w dokumentacji
 
-tapply|() - works in the way that it applies the third argument, a function, to subsets of the first argument,
+if applied FUN has more arguments eg fun(x, addArg)
+then
+apply(data, 1, fun, addArg = 5)
+
+tapply() - works in the way that it applies the third argument, a function, to subsets of the first argument,
 where the subset corresponds to the levels of the second argument.
 
 tapply(dat$height, dat$gender, mean) -> zwroci srednie wartosci wzrostu dla obu plci
@@ -363,7 +367,7 @@ do data.frame mozemy sie odnosic przez nazwe kolumny ($)  xxx$colname
 pusty data.frame z 2 kolumnami o typie numeric i integer
 #occurances<-data.frame(intervalStart = numeric(), events = integer())
 
-
+laczenie dataframes
 mozna laczyc ze soba data.frames, gdy maja jakas kolumne wspolna
 
 datAll<-merge(dat1, dat2, by.x="names", by.y="name")   # nie musza sie tak samo nazywac
@@ -796,8 +800,15 @@ lm.obj<-lm(Y~X+I(X^2))  - I sprawia ze rozumie to w sensie arytmetycznym
 plot(X,Y)
 lines(sort(X), predict(lm.obj)[order(X)], type="l"); sort- zeby uniknac dziwnych przeskow w danych
 
+___________________
+
+kilka rysunkow na jednym
+do rysowania wielu wykresow na jednym canvasie
+layout(1:2)
 
 
+!!!! wazne
+!!!! important
 
 LISTA FUNKCJI ZWRACAJACYCH INFORMACJE O OBIEKTACH
 coef() - estimated model parameters
@@ -1030,6 +1041,11 @@ mozna tez przez cat() wypisywac do pliku,
 writeLines(..., con="filename") - pisze do pliku jako jedna linia
 
 wczytuje sie tak samo przez load()
+
+
+sprawdzenie czy plik istnieje
+file.exists()
+
 
 class(obiekt) - wypisuje jakiej klasy jest dany obiekt
 show() - wypisuje domyslne informacje o obiekcie (zalezne od klasy obiektu)
@@ -1451,7 +1467,12 @@ ggmap(mapData1, extent = "panel", ylab = "Lattitude", xlab = "Longitude")
 
 debug mode in rstudio
 https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio
+########
 
+czyszczenie pamieci RAM
+garbage collector
+
+gc()
 
 ##########
 
