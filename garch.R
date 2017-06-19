@@ -149,13 +149,23 @@ x <- arima.sim(n=1000, model=list(ar=c(0.5, -0.25, 0.4), ma=c(0.5, -0.3)))
 final_aic <- Inf
 final_order <- c(0,0,0)
 for (i in 0:4) for (j in 0:4) {
-   current_aic <- AIC(arima(x, order=c(i, 0, j)))
+  print(i,j)
+     current_aic <- AIC(arima(x, order=c(i, 0, j)))
    if (current_aic < final_aic) {
      final_aic <- current_aic
      final_order <- c(i, 0, j)
      final_arma <- arima(x, order=final_order)
    }
 }
+
+#komunikat o warningu
+# test <- arima(x, order=c(4, 0, 3))
+# #zwraca FASLE gdy cos nie tak
+# arimaFit = tryCatch( arima(x, order=c(4, 0, 3)),
+#                      error=function( err ) FALSE,
+#                      warning=function( err ) FALSE )
+# arimaFit
+
 
 final_aic
 final_order
@@ -242,7 +252,7 @@ Box.test(acf(eps)$acf, lag = 20, type = "Ljung-Box")  # like discrete whitre noi
 acf(eps^2)   # evidence of conditionally heteroskedastic
 
 library(tseries)
-eps_garch <- garch(eps, trace = F)    # trace - excessive output
+eps_garch <- garch(eps, trace = F)    # trace - excessive output   , domyslnie order - c(1,1)
 eps_garch
 
 eps_garch$order
@@ -255,3 +265,111 @@ garch_res <- eps_garch$residuals[-1]   # first is NA
 
 acf(garch_res)
 acf(garch_res^2)
+
+
+# GARCH(X,X)  X => 1:2
+
+set.seed(2)
+a0 <- 0.2
+a1 <- 0.5
+a2 <- 0.2
+b1 <- 0.3
+b2 <- 0.2
+w <- rnorm(10000)
+eps <- rep(0, 10000)  #store time series vals
+sigsq <- rep(0, 10000)   # store ARMA variances
+for (i in 3:10000) {
+  #sigsq[i] <- a0 + a1 * (eps[i-1]^2) + a2 * (eps[i-2]^2) +b1 * sigsq[i-1] + b2 * sigsq[i-2]
+  #sigsq[i] <- a0 + a1 * (eps[i-1]^2) + b1 * sigsq[i-1] + b2 * sigsq[i-2]
+  sigsq[i] <- a0 + a1 * (eps[i-1]^2) + a2 * (eps[i-2]^2) +b1 * sigsq[i-1] 
+  eps[i] <- w[i]*sqrt(sigsq[i])
+}
+
+plot(eps, type = "l")
+
+acf(eps)
+Box.test(acf(eps)$acf, lag = 20, type = "Ljung-Box")  # like discrete whitre noise
+
+acf(eps^2)   # evidence of conditionally heteroskedastic
+
+library(tseries)
+eps_garch <- garch(eps, order = c(1,2), trace = F)    # trace - excessive output
+eps_garch
+
+eps_garch$order
+eps_garch$coef
+eps_garch$vcov
+
+confint(eps_garch)   # wartosci nijak sie maja do ustawianych, nawet jak poprawnie wybierzemy rzad
+
+garch_res <- eps_garch$residuals[-1]   # first is NA
+
+acf(garch_res)
+acf(garch_res^2)
+
+
+################3 combine arima and garch
+library(rugarch)
+
+# spReturns = diff(log(Cl(GSPC)))   # zamiast integrated 
+
+# Create the forecasts vector to store the predictions
+windowLength = 500
+foreLength = length(spReturns) - windowLength
+forecasts <- vector(mode="character", length=foreLength)
+
+for (d in 0:foreLength) {
+  # Obtain the S&P500 rolling window for this day
+  spReturnsOffset = spReturns[(1+d):(windowLength+d)]
+  
+  # Fit the ARIMA model
+  final.aic <- Inf
+  final.order <- c(0,0,0)
+  for (p in 0:5) for (q in 0:5) {
+    if ( p == 0 && q == 0) {
+      next
+    }
+    
+    arimaFit = tryCatch( arima(spReturnsOffset, order=c(p, 0, q)),
+                         error=function( err ) FALSE,
+                         warning=function( err ) FALSE )
+    
+    if( !is.logical( arimaFit ) ) {
+      current.aic <- AIC(arimaFit)
+      if (current.aic < final.aic) {
+        final.aic <- current.aic
+        final.order <- c(p, 0, q)
+        final.arima <- arima(spReturnsOffset, order=final.order)
+      }
+    } else {
+      next
+    }
+  }
+  
+  # Specify and fit the GARCH model
+  spec = ugarchspec(
+    variance.model=list(garchOrder=c(1,1)),
+    mean.model=list(armaOrder=c(final.order[1], final.order[3]), include.mean=T),
+    distribution.model="sged"
+  )
+  fit = tryCatch(
+    ugarchfit(
+      spec, spReturnsOffset, solver = 'hybrid'
+    ), error=function(e) e, warning=function(w) w
+  )
+  
+  # If the GARCH model does not converge, set the direction to "long" else
+  # choose the correct forecast direction based on the returns prediction
+  # Output the results to the screen and the forecasts vector
+  if(is(fit, "warning")) {
+    forecasts[d+1] = paste(index(spReturnsOffset[windowLength]), 1, sep=",")
+    print(paste(index(spReturnsOffset[windowLength]), 1, sep=","))
+  } else {
+    fore = ugarchforecast(fit, n.ahead=1)
+    ind = fore@forecast$seriesFor
+    forecasts[d+1] = paste(colnames(ind), ifelse(ind[1] < 0, -1, 1), sep=",")
+    print(paste(colnames(ind), ifelse(ind[1] < 0, -1, 1), sep=",")) 
+  }
+}
+
+
