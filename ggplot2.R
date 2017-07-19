@@ -63,3 +63,24 @@ plot3 <-ggplot(df,
   labs(title = "Tytul", x = "some on x", y = "some on y" )
 
 plot3
+
+
+
+few boxplots:
+
+plot1 <- ggplot(data = sumDF,
+                aes(x = testSample, y = accuracy) ) +     # okreslasz osie
+  geom_boxplot(aes(fill = testSample))      # okreslasz po czym dzielsz boxploty
+
+
+plot2 <- ggplot(data = sumDF,
+                aes(x = percent, y = accuracy) ) +
+  geom_boxplot(aes(fill = percent))
+
+plot2
+
+plot3 <- ggplot(data = sumDF,
+                aes(x = percent, y = accuracy) ) +
+  geom_boxplot(aes(fill = testSample))     #  w tym wypadku kazdy element osi x jest dodatkowo podzielony wg testSample
+
+plot3
