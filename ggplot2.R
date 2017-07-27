@@ -68,6 +68,9 @@ plot3
 
 few boxplots:
 
+https://stackoverflow.com/questions/14604439/plot-multiple-boxplot-in-one-graph
+# bardzo dobry tutorial boxplotow
+
 plot1 <- ggplot(data = sumDF,
                 aes(x = testSample, y = accuracy) ) +     # okreslasz osie
   geom_boxplot(aes(fill = testSample))      # okreslasz po czym dzielsz boxploty
@@ -84,3 +87,17 @@ plot3 <- ggplot(data = sumDF,
   geom_boxplot(aes(fill = testSample))     #  w tym wypadku kazdy element osi x jest dodatkowo podzielony wg testSample
 
 plot3
+
+
+pointData <- data.frame(
+  xname = pattVec,
+  ypos = c(0.99, 0.99, 0.99),
+  ptyname = c("20", "40", "60")
+)
+
+ plotAccuracy <- ggplot(data = sumDF,
+                 aes(x = percent, y = accuracy) ) +
+   geom_boxplot(aes(fill = testSample)) +
+   geom_point(data  = pointData, mapping = aes(x = xname, y = ypos, shape = factor(ptyname)) )
+
+   # rysuje wtedy pkt pod xname, wysokosci z ypos, a ksztalt pkt z ptyName

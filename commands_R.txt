@@ -1,3 +1,6 @@
+running R scripts from command line:
+Rscript xxx.R 
+
 operatory przypisania: <-, <<-, =, ->, ->>
 a <- 5+5     przypisuje wartosc
 
@@ -388,6 +391,13 @@ przydatne
 ! / is.na(Colname) 
 mozna przekazac do funkcji liczacych:
 mean(fata.frame$colName, na.rm=T)   - wtedy wywalamy caly wiersz gdzie bylo NA
+
+
+________
+combine vectors ; combination of vectors
+
+expand.grid( vec1, vec2, ... )
+
 __________
 list() - lista moze trzymac obiekty roznych typow:
 MyList <- list(M, a, vec)
@@ -491,7 +501,7 @@ while(cond) expr   - sprawdzane na poczatku
 
 repeat expr - trzeba wyjsc recznie  - na pewno wykona sie raz - analogia do while{} while()
 
-przydatne komendy: next, break 
+przydatne komendy: next, break   (analogia do continue) 
 ________________
 scripts:
 File-> Source R code albo komenda
@@ -1497,3 +1507,9 @@ parallelize jobs:
 #
 # # remember to shut down clusters before quitting R
 # stopCluster(cl)
+
+
+######
+information about R and package
+citation() - R
+citation("package") - about package
