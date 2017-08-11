@@ -386,12 +386,18 @@ dat<-subset(data.frame, colName > xxx, select = c(colName1, colname2))
 select tez moze byc w formie select = colName1:colName3
 albo gdy nie chcemy kolumny to select = -colName
 
+sort df
+sortowanie data.frame 
+
+df[order(df$col1, df$col2),]
+
 
 przydatne
 ! / is.na(Colname) 
 mozna przekazac do funkcji liczacych:
 mean(fata.frame$colName, na.rm=T)   - wtedy wywalamy caly wiersz gdzie bylo NA
 
+complete.cases() - sprawdza czy nie ma NA
 
 ________
 combine vectors ; combination of vectors
@@ -1513,3 +1519,98 @@ parallelize jobs:
 information about R and package
 citation() - R
 citation("package") - about package
+
+
+######
+
+how get object name
+nazwa zmiennej
+
+deparse(substitute(object))
+
+
+
+######
+
+rozklady
+distributions
+
+przyklad dla rozkladu norm
+
+# Create a sequence of numbers between -10 and 10 incrementing by 0.1.
+x <- seq(-10, 10, by = .1)
+
+dnorm()
+
+# Choose the mean as 2.5 and standard deviation as 0.5.
+y <- dnorm(x, mean = 2.5, sd = 0.5)
+
+plot(x,y)
+
+
+pnorm()
+ 
+# Choose the mean as 2.5 and standard deviation as 2. 
+y <- pnorm(x, mean = 2.5, sd = 2)
+
+plot(x,y)
+
+qnorm()
+
+y <- qnorm(x, mean = 2, sd = 1)
+plot(x,y)
+
+
+rnorm()
+
+y <- rnorm(100)
+hist(y)
+
+
+###########3
+vectorized form
+
+library(plyr)
+
+plyr
+
+https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r#gs.U4U8Qmc
+
+
+########
+
+merge dataframe
+
+wyszukiwanie wspolnych wierszy w df i dodawanie innych kolumn do df (na podstawie kolumny ze wspolnymi wierszami) 
+
+laczy tylko te wiersze, ktore sa wspolne (z obu df) pomija inne
+
+merge()
+
+df1 <- data.frame(cbind(c(1:6), c(7:12)) )
+df2 <- data.frame(cbind(c(3:8), c(10:15), c(16:21) ) )
+colnames(df2) <-c("a", "b", "c")
+merge(df1, df2[,c("a", "c")] , by.x = "X1", by.y = "a")[,]
+
+
+
+######
+
+use overwritten function
+uzycie nadpisanej zaslonietej funkcji z innego pakietu
+
+pakiet::funkcja()
+package::function()
+
+
+#####
+
+multiply all elements
+mnozenie wszystkich elementow przez siebie
+
+prod(vector)
+
+
+#####
+
+meld()  - rozbijanie zagregowanych df na bardziej "proste", ale z wieksza iloscia powtorzen parametrow w wierszach 
