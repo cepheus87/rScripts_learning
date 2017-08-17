@@ -36,10 +36,16 @@ df2 <- data.frame(age, voice)
 xmdl <- lm(voice ~ age, df2)
 summary(xmdl)
 
+plot(x = df2$age, y = df2$voice)
+abline(xmdl)
+
 names(xmdl)
 plot(fitted(xmdl), residuals(xmdl))
 
 plot(xmdl)
+
+
+
 
 #normality of residuals assumption:
 hist(residuals(xmdl))
