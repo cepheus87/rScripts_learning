@@ -202,6 +202,10 @@ aby dostac sie do indeksow liczb wektora, ktore spelniaja warunek uzywa sie funk
 which(a<1 & a>4)
 which() zwraca pozycje (np. wiersz)
 
+vectorized which, wersja wektorowa - patrz dplyr::filter
+
+dplyr::filter(df, grepl(paste(patternVec, collapse = "|"), searchColumnName) )
+
 
 Grouped or stacked bar chart
 
@@ -326,6 +330,12 @@ t(matrix)
 aperm() - array transposition - transpozycja macierzy jest rowna komendom:
 tmatrix<-aperm(matrix)
 tmatrix<-aperm(matrix, c(2,1))
+
+
+
+array - odmiana macierzy, ale moze byc z wieksza iloscia wymiarow niz 2d
+array(1:7, dim = c(1,2,3))
+array[1,1,1] - pojedynczy element
 
 apply() - can be used to repeat operations over rows in a matrix.
 lapply - return list - dla list, oraz mozna tez do data.frame
@@ -588,13 +598,21 @@ wilcox.test() - wilcoxon rank sum (Mann-Whitney test) - non-parametric; alternat
 wilcoxon signed rank -> alternatywa do paired t-test
 
 
+______
+paired sign test
+library(BSDA)
+
+The sign test for two-sample paired data can be used for a similar purpose as the paired rank-sum test in cases where the distribution of the differences is not symmetrical. 
+
+SIGN.test()
+
 
 _____q q plot_____
 quantile-quantile plot - wykres sprawdzajacy czy zmienna ma rozklad normalny, jezeli tak to powinna sie ukladac na linii
 
 qqnorm(), qqline(), qqplot
 qqnorm is a generic function the default method of which produces a normal QQ plot of the
-values in y. qqline adds a line to a “theoretical”, by default normal, quantile-quantile 
+values in y. qqline adds a line to a theoretical, by default normal, quantile-quantile 
 plot which passes through the probs quantiles, by default the first and third quartiles.
 qqplot produces a QQ plot of two datasets.
 
@@ -723,6 +741,9 @@ marginal proportion (proporcje w wierszach lub kolumnach)
 prop.table(obiekt klasy table,1) - wyswietla w wierszach (1 - pierwsza zmienna tabeli 2d, wtedy suma kazdego wiersza (pierwszej zmiennej)  =1
 prop.table(obiekt klasy table,2) - wyswietla w kolumnach (suma kazdej kolumny =1) -> druga zmienna
 
+
+addmargins (table object, 1/2) - add sums for rows or columns (without - both) 
+
 pakiet:zoo
 rollmean(vec, 2) - wylicza sednia miedzy punktami - przydatne do obliczania pola pod punktami:
 sum( rollmean(vec,2))
@@ -771,6 +792,17 @@ par(mfrow=c(1,1)) #Restore 1x1 layout
 names(lm.obj)
 lm.obj$coef
 
+
+sprawdzanie czy model jest liniowy - sprawdzanie autocorelacji dla residuow
+check if model is linear - autocorelation check for residuals:
+
+durbin-watson test w
+library(lmtest)
+dwtest(formula / fitted lm model)
+
+H0 - no autocorrelation, Ha - there is autocorrelation between residuals
+
+jest tez durbinWatsonTest w library(car) ale to cos dzialalo dziwnie nawet na danych testowych
 
 rowniez
 
@@ -1598,11 +1630,11 @@ laczy tylko te wiersze, ktore sa wspolne (z obu df) pomija inne
 
 merge()
 
-df1 <- data.frame(cbind(c(1:6), c(7:12)) )
+df1 <- data.frame(cbind(c(1:6), c(7:12), c(14:16, 22:24) ) )
 df2 <- data.frame(cbind(c(3:8), c(10:15), c(16:21) ) )
 colnames(df2) <-c("a", "b", "c")
 merge(df1, df2[,c("a", "c")] , by.x = "X1", by.y = "a")[,]
-
+merge(df1, df2 , by.x = c("X1", "X3"), by.y = c("a", "c"))[,]
 
 
 ######
@@ -1643,3 +1675,22 @@ is.element(x, y) is identical to x %in% y
 
 Reduce() - combine the elements of a given vector and a possibly given initial value. 
 
+
+####
+
+suppress specific warnings:
+
+f <- function( x) {
+  warning( "bla bla" )
+  y <- x + 3
+  warning( "yada yada" )
+  y
+}
+
+> f(5)
+[1] 8
+Warning messages:
+1: In f(5) : bla bla
+2: In f(5) : yada yada
+> suppressWarnings( f(5) )
+[1] 8

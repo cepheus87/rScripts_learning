@@ -171,60 +171,62 @@ summary(m2_lme4)
 # gdy nie chcemy miec fixed intercept to stosujemy zapis: 0 + (1 | g) 
 
 ############
-# # more levels - 
-# A <- c(rep("a", 100), rep("b", 100))
-# B <- c(rep("e", 50), rep("f", 50 ), rep("g",50), rep("h", 50))
-# C <- c(rep("k", 25), rep("l", 25 ), rep("m",25), rep("n", 25), rep("o", 25), rep("p", 25 ), rep("q",25), rep("r", 25) )
-# 
-# sd1 <- 20
-# m1 <- 100
-# sd2 <- 10
-# m2 <- 50
-# 
-# sd3 <- 1
-# sd4 <- 3
-# sd5 <- 5 
-# sd5 <- 7
-# sd6 <- 9
-# 
-# no <- 1
-# 
-# func <- function(x){
-#   if(x[1] == "a"){
-#     
-#     if(x[2] == "e"){
-#       return(rnorm(mean = m1, sd= (sd1 + sd3), n = no))
-#       
-#     } else if(x[2] == "f"){
-#       return(rnorm(mean = m1, sd= (sd1+ sd4), n = no))
-#       
-#     } else if(x[2] == "g"){
-#       return(rnorm(mean = m1, sd= (sd1+ sd5), n = no))
-#              
-#     }else{
-#       return(rnorm(mean = m1, sd= (sd1+ sd6), n = no))
-#     }
-#       
-#     
-#     
-#   }else{
-#     
-#     if(x[2] == "e"){
-#       return(rnorm(mean = m2, sd= (sd2 + sd3), n = no))
-#              
-#     } else if(x[2] == "f"){
-#       return(rnorm(mean = m2, sd= (sd2+ sd4), n = no))
-#              
-#     } else if(x[2] == "g"){
-#       return(rnorm(mean = m2, sd= (sd2+ sd5), n = no))
-#              
-#     }else{
-#       return(rnorm(mean = m2, sd= (sd2+ sd6), n = no))
-#     }
-#     
-#   }
-# }
-# 
-# df<-data.frame(A,B,C)
-# y <- sapply(df, func)
 
+
+#### publication ####
+
+path <- "~/rScripts_learning"
+setwd(path)
+
+data <- read.table(file = "linear.txt")
+
+splitted <- split(data, rep(1:4 , each = 18))
+
+data2 <- rep(NA,18)
+
+for(name in names(splitted)){
+  data2 <- cbind(data2, splitted[[name]])
+}
+
+data2 <- data2[,2:5]
+colnames(data2)<-c("Subj", "Item", "SOA", "RT")
+
+#head(data2)
+
+
+data2$Subj <- factor(data2$Subj)
+data2$Item <- factor(data2$Item)
+data2$SOA <- factor(data2$SOA)
+data2$RT <- as.numeric(data2$RT)
+
+str(data2)
+
+library(lme4)
+
+m1 <- lmer( RT ~ SOA  + (1|Item), data = data2 )
+m2 <- lmer( RT ~ SOA + (1+SOA|Subj), data = data2 )
+m3 <- lmer( RT ~ SOA + (1|Item) + (1+SOA|Subj), data = data2 )
+
+var1 <- as.data.frame(VarCorr(m1))
+coef(m1)
+
+var2 <- as.data.frame(VarCorr(m2))
+coef(m2)
+
+summary(m3)
+var3 <- as.data.frame(VarCorr(m3))
+coef(m3)
+
+# (1+SOA|Subj)
+coef(m3)[["Subj"]][["(Intercept)"]]
+coef(m3)[["Subj"]][["(Intercept)"]] - summary(m3)$coefficients[1] 
+
+coef(m3)
+
+
+m4 <-  lmer(RT ~ SOA + (1|Item) + (1|Subj) , data = data2)
+print(m4)
+
+# source("~/projekty/healthtell/Oleks/rcode/Scripts_Olek/anova.R")
+# 
+# anova(data2, c("Subj", "Item", "SOA"))
