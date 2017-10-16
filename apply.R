@@ -1,7 +1,12 @@
 # apply intro
 
 # https://nsaunders.wordpress.com/2010/08/20/a-brief-introduction-to-apply-in-r/
+sb is data frame
 
+apply(sb[,c("Row","Column")], 1, function(y){ 
+  xy <- (y[2]-1)*392 + y[1] 
+  paste0("XY", paste(rep(x = "0", (zerosNo - str_length(xy)) ), collapse = ""), xy  ) 
+  } )
 
 
 # tapply ------------------------------------------------------------------

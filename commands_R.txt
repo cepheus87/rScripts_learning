@@ -31,6 +31,8 @@ pomoc:  ?functionName() - przekierowuje do stronki HTML (dokumentacji) z dana fu
 example(functionName) - pokazuje przyklady dla danej funkcji
 
 options() - rozne opcje ustawiane np. precyzja pokazywania wartosci options(digits = XXX)
+getOption(x)
+
 
 NaN, +/- Inf, NA - not available
 
@@ -390,6 +392,11 @@ wspolne mozna jako wektory by.x=c("kol1", "kol2"),
 dodatkowo jezeli maja one kolumny, ktorych nie ma ta druga to trzeba uzyc all=T
 
 str(data.frame) - stucture of object
+
+create empty data.frame with given rownames (rows number)
+ test <-data.frame(row.names=1:4)
+ df <- data.frame(x=c(1,2,3,4))
+ test <- cbind(test, df)
 
 
 dat<-subset(data.frame, colName > xxx, select = c(colName1, colname2)) 

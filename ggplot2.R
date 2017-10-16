@@ -1,3 +1,6 @@
+http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization
+
+
 #http://r4stats.com/examples/graphics-ggplot2/
 
 library(ggplot2)
