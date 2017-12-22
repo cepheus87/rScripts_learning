@@ -72,6 +72,11 @@ wektorowa wersja if else
 ifelse(test,yes,no) - test, warunek, ktory mozna sprowadzic do wartosci logicznej
 	w yes lub no moze byc kolejny warunek ifelse
 
+
+if(){
+} else if(){
+}
+
 args(nazwa_funkcji) - podaje jakie argumenty moze przyjmowac funkcja
 
 Grafika w R (base, lattice, ggplot2)
@@ -339,9 +344,13 @@ array - odmiana macierzy, ale moze byc z wieksza iloscia wymiarow niz 2d
 array(1:7, dim = c(1,2,3))
 array[1,1,1] - pojedynczy element
 
+
+element wise mean over list of matrices -> check Reduce
+
 apply() - can be used to repeat operations over rows in a matrix.
 lapply - return list - dla list, oraz mozna tez do data.frame
 sapply - zwraca wektor 
+mapply
 vapply
 tapply
 
@@ -1328,7 +1337,7 @@ z <-numeric(100000)
 if()  jesli , jezeli
 if(cond) expr
 
-testowanie czasu wykonania:
+testowanie czasu wykonania, execution time:
 system.time( dzialanie ) 
 
 
@@ -1703,6 +1712,17 @@ Warning messages:
 [1] 8
 
 
+zablokowanie wiadomosci
+
+suppressMessages()
+
+####
+no output
+bez wypisywania
+
+invisible(1:10)
+
+
 ######
 
 pipe operator
@@ -1743,4 +1763,75 @@ args must be a list of arguments
 for egzample for data.frame
 list's element name is column name and values are values in df
 
+
+
+
+
+create object with some name
+stworzenie obiektu o danej nazwie
+
+assign(paste("bla", "bla", sep = "_"), 5)
+
+######
+
+how to get to the object by its char name / string name
+
+eval(parse(text = "some_obj_name"))
+
+
+######
+
+how to set different scales in faccet_wrap - need to create dummy data frame and use geom_blank()
+
+  dummy <- NULL    
+  for(name in unique(ggdf$hscName)){
+    sb <- subset(ggdf, hscName == name)
+    rg <- range(range(sb$Mapix), range(sb$MIAMI))
+    dummy <- rbind(dummy, data.frame(Mapix = rg, MIAMI = rg, hscName = name))
+  }
+  
+  
+  pl <- ggplot(ggdf, aes(x = Mapix, y = MIAMI)) + theme_bw() +
+    geom_point() +  facet_wrap( ~hscName,  nrow=3, scales="free") +
+    geom_blank(data = dummy) 
+  
+   pl
+
+
+
+######
+
+many conditions in data frame subset
+
+data[ data$someCond %in% c("a", "b"), ]
+
+
+
+####
+
+discrete manual points shape
+
+trzeba zdafiniowac, ze ksztalty sa zmienna (peptide) oraz podac ze ustawiamy recznie: scale_shape_manual()
+
+
+pl <- ggplot(data=ggdf, aes(x=median, y=CV, colour = peptide, shape = peptide)) + theme_bw() +
+  facet_wrap(~ waferSlideArray + resolution, nrow=2, scales="fixed" ) +
+  geom_point() +
+  scale_shape_manual(values = 0:14) +
+
+  #scale_fill_gradientn(colours=r, name = intensType, limits = rg ) + #, breaks=seq(-2, 2, 1), limits=c(-2, 2) ) +
+  labs(x = "median(FG)", y = "CV", title=paste0("Coefficient of variation (FG) for peptides with replicates on V16 wafer"), 
+       subtitle = paste0("Sequences without explicit wavelength label are for 532 nm \n version wafer slide array")) +
+  theme(plot.title=element_text(hjust=0.5, size=14), plot.subtitle=element_text(hjust=0.5, size = 12), axis.text.x=element_text(size=12, angle = 90),
+        axis.title=element_text(size=14), axis.text.y=element_text(size=12),
+        legend.text=element_text(size=11)) 
+
+pl
+
+
+####
+
+find position in a string of specific pattern
+
+gregexpr(pattern ='2',"the2quickbrownfoxeswere2tired")
 

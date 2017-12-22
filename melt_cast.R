@@ -35,5 +35,12 @@ head(airquality)
 aql <- melt(airquality, id.vars = c("month", "day")) # [a]ir [q]uality [l]ong format
 head(aql)
 
-aqw <- dcast(aql, month + day ~ variable) # can be added value.var = "foreground_median" if set value should be other than variable
+aqw <- dcast(aql, month + day ~ variable)
 head(aqw)
+
+aqw <- dcast(aql, month + day ~ variable, value.var = "foreground_median") if set value should be other than variable
+
+
+month + day - zmienne, ktore sluza do "definiowania" wspolnych pomiarow - one zostaja w data.frame bez zmian
+variable - zmienna, w ktorej mamy rozne nazwy, z ktorych powstana nazwy kolumn w nowym data.frame
+foreground_median - nazwa zmiennej, ktora zostanie wpisana do nowych kolumn

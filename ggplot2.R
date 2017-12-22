@@ -104,3 +104,24 @@ pointData <- data.frame(
    geom_point(data  = pointData, mapping = aes(x = xname, y = ypos, shape = factor(ptyname)) )
 
    # rysuje wtedy pkt pod xname, wysokosci z ypos, a ksztalt pkt z ptyName
+
+
+
+
+
+######
+how to set different scales in faccet_wrap - need to create dummy data frame and use geom_blank()
+
+  dummy <- NULL    
+  for(name in unique(ggdf$hscName)){
+    sb <- subset(ggdf, hscName == name)
+    rg <- range(range(sb$Mapix), range(sb$MIAMI))
+    dummy <- rbind(dummy, data.frame(Mapix = rg, MIAMI = rg, hscName = name))
+  }
+  
+  
+  pl <- ggplot(ggdf, aes(x = Mapix, y = MIAMI)) + theme_bw() +
+    geom_point() +  facet_wrap( ~hscName,  nrow=3, scales="free") +
+    geom_blank(data = dummy) 
+  
+   pl

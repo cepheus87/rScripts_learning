@@ -129,7 +129,7 @@ scale <- ir.pca$scale
 
 
 
-#####################
+##### TUTAJ poprawny przyklad ###########
 # !!!! 3
 
 
@@ -160,7 +160,7 @@ C <- ( t(X) %*% X ) / (nrow(X)-1)
 C
 
 
-#to sa eigenvectors
+#to sa eigenvectors (przeskalowane przez squaredroot of eigenvalues)
 pca <- prcomp(X)   # dla X_3col rot = 3x3
 pca
 
@@ -169,12 +169,15 @@ pca_notCentData
 
 evec <- pca$rotation   # to jest V
 #ortogonalne -> evec %*% t(evec) = unit
+# V == rotation == loadings 
+
 
 pc1 <- pca$rotation[,1]
 pc2 <- pca$rotation[,2]
 pc3 <- pca$rotation[,3]
 
 
+# X %*% pca$ rotation == scores
 
 
 # values that are (proportional to) eigenvalues simply by taking their squares:
@@ -203,6 +206,9 @@ evec %*% diagM %*% t(evec)  # equals the cov matr
 # PC = X V
 X %*% evec
 plot(X %*% evec)
+
+# it is equal to pca$x
+
 
 PC <-X %*% evec
 PC1 <- X %*% pc1
@@ -300,7 +306,7 @@ orgDataAll <- pca$rotation %*% finalDataAll
 plot(t(orgDataAll))
 
 
-##################
+##### wiecej obserwabli niz pomiarow #########
 
 # 3a  !!!! rozkminy, gdy wiecej obserwabli niz pomiarow n x p ( p > n ) 
 

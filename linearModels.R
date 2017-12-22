@@ -60,7 +60,7 @@ dfbeta(xmdl)
 # gives value of which coeficients need to be adjusted without given point 
 
 
-#### MIXED MODELS
+#### MIXED MODELS  ####
 library(lme4)
 
 ?lmer
@@ -111,7 +111,7 @@ anova(polNull, polModel)
 #reduced model:   frequency ~ attitude + gender
 
 
-#### Random Slope vs Random intercept
+#### Random Slope vs Random intercept  ####
 coef(polModel)
 
 #random slope:
@@ -139,7 +139,7 @@ plot(polModel_rs)
 # check package influence.ME
 
 
-####  nested random effect (1 | r1/r2)
+####  nested random effect (1 | r1/r2)  ####
 
 # https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf
 
@@ -230,3 +230,14 @@ print(m4)
 # source("~/projekty/healthtell/Oleks/rcode/Scripts_Olek/anova.R")
 # 
 # anova(data2, c("Subj", "Item", "SOA"))
+
+
+
+#### fit to matrix  ####
+
+matr <- matrix(c(0,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,0), nrow = 4, byrow = T)
+matr
+df <- as.data.frame(matr)
+df
+
+lin <- lm(matr ~ matr[1,] + matr[2,] + matr[3,], matr[4,])
