@@ -85,6 +85,9 @@ lmer(frequency ~ attitude, data=politeness)   # no random effect
 polModel <- lmer(frequency  ~  attitude  + (1|subject) + (1|scenario), data=politeness)
 summary(polModel)
 
+polModelLL <- lmer(frequency  ~  attitude  + (1|subject) + (1|scenario), data=politeness, REML = F)
+summary(polModelLL)  # negative LL
+ 
 # Random effects
 # more variability between subjects than between scenario
 # "Residual" == epsilon; stands for the variability that’s not due to either scenario or subject 
